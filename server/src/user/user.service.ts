@@ -1,26 +1,100 @@
+import { FindManyOptions } from './../../node_modules/typeorm/browser/find-options/FindManyOptions.d';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-auth.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>
+  ) { }
+
+  async findAll() {
+    const allUsers = await this.userRepo.find()
+
+    if (allUsers.length > 0) {
+      return {
+        status: 200,
+        users: allUsers,
+        message: "No users exist"
+      }
+    } else {
+      return {
+        status: 200,
+        users: allUsers,
+        message: "Users fetched successfully!"
+      }
+    }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findOne(id: string) {
+    const existingUser = await this.userRepo.findOne({
+      where: { id }
+    });
+
+    if (!existingUser) {
+      return {
+        status: 404,
+        message: "User not found"
+      }
+    } else {
+      return {
+        status: 404,
+        user: existingUser,
+        message: "User fetched successfully!"
+      }
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const existingUser = await this.userRepo.findOne({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      return {
+        status: 404,
+        message: "User not found",
+      };
+    }
+
+    // Update the user with the new values
+    await this.userRepo.update(id, {
+      ...updateUserDto,
+    });
+
+    // Fetch updated user details to return
+    const updatedUser = await this.userRepo.findOne({
+      where: { id },
+    });
+
+    return {
+      status: 200,
+      message: "User updated successfully",
+      data: updatedUser,
+    };
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  async remove(id: string) {
+    const existingUser = await this.userRepo.findOne({
+      where: { id }
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    if (!existingUser) {
+      return {
+        status: 404,
+        message: "User not found"
+      }
+    }
+    await this.userRepo.delete(id)
+
+    return {
+      status: 200,
+      message: "User deleted successfully",
+    };
   }
 }

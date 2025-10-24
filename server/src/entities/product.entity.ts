@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { User } from '../auth/entities/user.entity';
+import { User } from './user.entity';
 import { Company } from './company.entity';
 import { QuotationItem } from './quotation-item.entity';
 import { OrderItem } from './order-item.entity';

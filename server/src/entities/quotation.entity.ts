@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { Company } from './company.entity';
 import { Customer } from './customer.entity';
-import { User } from '../auth/entities/user.entity';
+import { User } from './user.entity';
 import { QuotationItem } from './quotation-item.entity';
 
 @Entity('quotation')

@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { AuthModule } from './auth/auth.module';
 import { Transaction } from 'typeorm';
-import { User } from './auth/entities/user.entity';
+import { User } from './entities/user.entity';
 import { Company } from './entities/company.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { Order } from './entities/order.entity';
@@ -18,6 +18,7 @@ import { Quotation } from './entities/quotation.entity';
 import { Customer } from './entities/customer.entity';
 import { Supplier } from './entities/supplier.entity';
 import { UserModule } from './user/user.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     UserModule,
+    CompanyModule,
     // add modules here
   ],
   controllers: [AppController],

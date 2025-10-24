@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { Company } from './company.entity';
 import { Supplier } from './supplier.entity';
-import { User } from '../auth/entities/user.entity';
+import { User } from './user.entity';
 import { PurchaseOrderItem } from './purchase-order-item.entity';
 import { ORDER_STATUS } from './enum';
 
