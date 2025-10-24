@@ -1,0 +1,312 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// user
+model User {
+  id              String        @id @default(uuid()) @map("id")
+  name            String        @map("name")
+  emailId         String        @unique @map("email_id")
+  phoneNumber     String        @map("phone_number")
+  password        String        @map("password")
+  role String @map("role")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  companies        Company[]      @relation("UserCompanies")
+  createdProducts  Product[]      @relation("CreatedProducts")
+  updatedProducts  Product[]      @relation("UpdatedProducts")
+  createdQuotations Quotation[]   @relation("CreatedQuotations")
+  createdPurchases PurchaseOrder[] @relation("CreatedPurchases")
+
+  @@map("user")
+}
+
+// company
+model Company {
+  id           String       @id @default(uuid()) @map("id")
+  name         String       @map("name")
+  emailId      String       @map("email_id")
+  phoneNumber  String       @map("phone_number")
+  address      String       @map("address")
+  gstin        String       @map("gstin")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  // Relations
+  createdBy    String       @map("created_by")
+  createdUser  User         @relation("UserCompanies", fields: [createdBy], references: [id])
+  suppliers    Supplier[]   @relation("CompanySuppliers")
+  customers    Customer[]   @relation("CompanyCustomers")
+  products     Product[]    @relation("CompanyProducts")
+  quotations   Quotation[]  @relation("CompanyQuotations")
+  orders       Order[]      @relation("CompanyOrders")
+  purchases    PurchaseOrder[] @relation("CompanyPurchases")
+
+  @@map("company")
+}
+
+// supplier
+model Supplier {
+  id          String     @id @default(uuid()) @map("id")
+  name        String     @map("name")
+  emailId     String     @map("email_id")
+  phoneNumber String     @map("phone_number")
+  address     String?    @map("address")
+  role String @map("role")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  companyId   String     @map("company_id")
+  company     Company    @relation("CompanySuppliers", fields: [companyId], references: [id])
+  purchaseOrders PurchaseOrder[] @relation("SupplierPurchaseOrders")
+
+  @@map("supplier")
+}
+
+// customer
+model Customer {
+  id          String     @id @default(uuid()) @map("id")
+  name        String     @map("name")
+  emailId     String     @map("email_id")
+  phoneNumber String     @map("phone_number")
+  address     String?    @map("address")
+  role String @map("role")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  companyId   String     @map("company_id")
+  company     Company    @relation("CompanyCustomers", fields: [companyId], references: [id])
+  createdOrders    Order[]        @relation("CreatedOrders")
+  quotations  Quotation[] @relation("CustomerQuotations")
+  orders      Order[]     @relation("CustomerOrders")
+
+  @@map("customer")
+}
+
+// product
+model Product {
+  id              String     @id @default(uuid()) @map("id")
+  name String  @map("name")
+  description  String  @map("description")
+  modelNumber String  @map("model_number")
+  category CATEGORY @map("category")
+  costPrice  Decimal @map("cost_price")
+  sellingPrice Decimal @map("selling_price")
+  stockQuantity  Int @map("stock_quantity")
+  minimumQuantity Int @map("minimum_quantity")
+  imageUrl String? @map("image_url")
+   createdAt DateTime  @default(now()) @map("created_at")
+   updatedAt DateTime  @updatedAt @map("updated_at")
+
+   // Relations
+  createdBy       String     @map("created_by")
+  createdUser     User       @relation("CreatedProducts", fields: [createdBy], references: [id])
+
+  updatedBy       String     @map("updated_by")
+  updatedUser     User       @relation("UpdatedProducts", fields: [updatedBy], references: [id])
+
+  companyId       String     @map("company_id")
+  company         Company    @relation("CompanyProducts", fields: [companyId], references: [id])
+
+  quotationItems  QuotationItem[]
+  orderItems      OrderItem[]
+  purchaseItems   PurchaseOrderItem[]
+
+  @@map("product")
+}
+
+// quotation
+model Quotation {
+  id           String           @id @default(uuid()) @map("id")
+  quotationNo  String           @unique @map("quotation_no")
+  dateIssued   DateTime         @default(now()) @map("date_issued")
+  validUntil   DateTime?        @map("valid_until")
+  totalAmount  Decimal          @map("total_amount")
+  remarks      String?          @map("remarks")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  // Relations
+  companyId    String           @map("company_id")
+  company      Company          @relation("CompanyQuotations", fields: [companyId], references: [id])
+
+  customerId   String           @map("customer_id")
+  customer     Customer         @relation("CustomerQuotations", fields: [customerId], references: [id])
+
+  createdBy    String           @map("created_by")
+  createdUser  User             @relation("CreatedQuotations", fields: [createdBy], references: [id])
+
+  quotationItems QuotationItem[]
+
+  @@map("quotation")
+}
+
+// quotation_item
+model QuotationItem {
+  id           String     @id @default(uuid()) @map("id")
+  quantity     Int        @map("quantity")
+  price        Decimal    @map("price")
+  subtotal     Decimal    @map("subtotal")
+
+  // Relations
+  quotationId  String     @map("quotation_id")
+  quotation    Quotation  @relation(fields: [quotationId], references: [id])
+
+  productId    String     @map("product_id")
+  product      Product    @relation(fields: [productId], references: [id])
+
+  @@map("quotation_item")
+}
+
+// order
+model Order {
+  id           String       @id @default(uuid()) @map("id")
+  orderNo      String       @unique @map("order_no")
+  dateOrdered  DateTime     @default(now()) @map("date_ordered")
+  status       ORDER_STATUS @default(PENDING) @map("status")
+  totalAmount  Decimal      @map("total_amount")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  // Relations
+  companyId    String       @map("company_id")
+  company      Company      @relation("CompanyOrders", fields: [companyId], references: [id])
+
+  customerId   String       @map("customer_id")
+  customer     Customer     @relation("CustomerOrders", fields: [customerId], references: [id])
+
+  createdBy    String       @map("created_by")
+  createdUser  Customer         @relation("CreatedOrders", fields: [createdBy], references: [id])
+
+  orderItems   OrderItem[]
+  payments     Payment[]
+
+  @@map("order")
+}
+
+// order_item
+model OrderItem {
+  id         String    @id @default(uuid()) @map("id")
+  quantity   Int       @map("quantity")
+  price      Decimal   @map("price")
+  subtotal   Decimal   @map("subtotal")
+
+  // Relations
+  orderId    String    @map("order_id")
+  order      Order     @relation(fields: [orderId], references: [id])
+
+  productId  String    @map("product_id")
+  product    Product   @relation(fields: [productId], references: [id])
+
+  @@map("order_item")
+}
+
+// purchase_order
+model PurchaseOrder {
+  id           String        @id @default(uuid()) @map("id")
+  poNumber     String        @unique @map("po_number")
+  dateOrdered  DateTime      @default(now()) @map("date_ordered")
+  totalAmount  Decimal       @map("total_amount")
+  status       ORDER_STATUS  @default(PENDING) @map("status")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  companyId    String        @map("company_id")
+  company      Company       @relation("CompanyPurchases", fields: [companyId], references: [id])
+
+  supplierId   String        @map("supplier_id")
+  supplier     Supplier      @relation("SupplierPurchaseOrders", fields: [supplierId], references: [id])
+
+  createdBy    String        @map("created_by")
+  createdUser  User          @relation("CreatedPurchases", fields: [createdBy], references: [id])
+
+  purchaseItems PurchaseOrderItem[]
+
+  @@map("purchase_order")
+}
+
+// purchase_order_item
+model PurchaseOrderItem {
+  id           String        @id @default(uuid()) @map("id")
+  quantity     Int           @map("quantity")
+  price        Decimal       @map("price")
+  subtotal     Decimal       @map("subtotal")
+
+  // Relations
+  purchaseOrderId String     @map("purchase_order_id")
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+
+  productId      String      @map("product_id")
+  product        Product     @relation(fields: [productId], references: [id])
+
+  @@map("purchase_order_item")
+}
+
+// transaction
+model Transaction {
+  id           String      @id @default(uuid()) @map("id")
+  date         DateTime    @default(now()) @map("date")
+  type         String      @map("type") // e.g., SALE, PURCHASE, REFUND
+  referenceId  String?     @map("reference_id")
+  amount       Decimal     @map("amount")
+  description  String?     @map("description")
+  createdAt    DateTime    @default(now()) @map("created_at")
+
+  @@map("transaction")
+}
+
+// payments
+model Payment {
+  id            String          @id @default(uuid()) @map("id")
+  paymentMethod PAYMENT_METHOD  @map("payment_method")
+  paymentStatus PAYMENT_STATUS  @default(PENDING) @map("payment_status")
+  amount        Decimal          @map("amount")
+  date          DateTime         @default(now()) @map("date")
+  remarks       String?          @map("remarks")
+
+  // Relations
+  orderId       String?          @map("order_id")
+  order         Order?           @relation(fields: [orderId], references: [id])
+
+  @@map("payment")
+}
+
+// category - this is temporary
+enum CATEGORY{
+  machine1
+  machine2
+}
+
+enum ORDER_STATUS {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PAYMENT_METHOD {
+  CASH
+  BANK_TRANSFER
+  UPI
+  CARD
+  CHEQUE
+}
+
+enum PAYMENT_STATUS {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
