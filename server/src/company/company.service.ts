@@ -36,8 +36,8 @@ export class CompanyService {
 
     return {
       status: 201,
-      message: 'Company created successfully',
-      data: savedCompany,
+      message: 'Company created successfully!',
+      company: savedCompany,
     };
   }
 
@@ -47,11 +47,19 @@ export class CompanyService {
       relations: ['createdUser'], // optional if you want user info
     });
 
-    return {
-      status: 200,
-      message: 'Companies fetched successfully',
-      data: companies,
-    };
+    if (companies.length <= 0) {
+      return {
+        status: 200,
+        message: 'No companies exist',
+        data: companies,
+      };
+    } else {
+      return {
+        status: 200,
+        message: 'Companies fetched successfully',
+        data: companies,
+      };
+    }
   }
 
   async findOne(id: string) {

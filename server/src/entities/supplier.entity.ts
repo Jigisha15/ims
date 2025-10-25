@@ -1,6 +1,4 @@
-import {
-	Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Company } from './company.entity';
 import { PurchaseOrder } from './purchase-order.entity';
 
@@ -9,7 +7,7 @@ export class Supplier {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Column()
+	@Column({ name: "name" })
 	name: string;
 
 	@Column({ name: 'email_id' })
@@ -18,10 +16,7 @@ export class Supplier {
 	@Column({ name: 'phone_number' })
 	phoneNumber: string;
 
-	@Column({ nullable: true })
-	address?: string;
-
-	@Column()
+	@Column({ name: "role" })
 	role: string;
 
 	@CreateDateColumn({ name: 'created_at' })

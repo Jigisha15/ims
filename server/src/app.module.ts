@@ -19,6 +19,8 @@ import { Customer } from './entities/customer.entity';
 import { Supplier } from './entities/supplier.entity';
 import { UserModule } from './user/user.module';
 import { CompanyModule } from './company/company.module';
+import { SupplierModule } from './supplier/supplier.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { CompanyModule } from './company/company.module';
     AuthModule,
     UserModule,
     CompanyModule,
+    SupplierModule,
+    ProductModule,
     // add modules here
   ],
   controllers: [AppController],

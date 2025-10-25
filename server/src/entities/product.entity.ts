@@ -51,7 +51,7 @@ export class Product {
 	@JoinColumn({ name: 'created_by' })
 	createdUser: User;
 
-	@Column({ name: 'updated_by' })
+	@Column({ nullable: true, name: 'updated_by' })
 	updatedBy: string;
 
 	@ManyToOne(() => User, user => user.updatedProducts)
