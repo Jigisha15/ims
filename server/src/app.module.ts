@@ -22,6 +22,7 @@ import { CompanyModule } from './company/company.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { ProductModule } from './product/product.module';
 import { CustomerModule } from './customer/customer.module';
+import { QuotationModule } from './quotation/quotation.module';
 
 @Module({
   imports: [
@@ -55,7 +56,7 @@ import { CustomerModule } from './customer/customer.module';
     SupplierModule,
     ProductModule,
     CustomerModule,
-    // add modules here
+    QuotationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

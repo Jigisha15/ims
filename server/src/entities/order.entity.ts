@@ -1,7 +1,4 @@
-import {
-	Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany,
-	CreateDateColumn, UpdateDateColumn, JoinColumn
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { Company } from './company.entity';
 import { Customer } from './customer.entity';
 import { OrderItem } from './order-item.entity';
