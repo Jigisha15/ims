@@ -88,22 +88,22 @@ export class ProductService {
   async findCategoryWise(category: CATEGORY) {
     const categoryProducts = await this.productRepo.find({
       where: { category },
-      order: { createdAt: "DESC" }
-    })
+      order: { createdAt: 'DESC' },
+    });
 
-    if (categoryProducts.length <= 0) {
+    if (!categoryProducts || categoryProducts.length === 0) {
       return {
         status: 200,
-        message: 'No products exist',
-        data: categoryProducts,
-      };
-    } else {
-      return {
-        status: 200,
-        message: 'Products fetched successfully',
-        data: categoryProducts,
+        message: `No products found in category: ${category}`,
+        data: [],
       };
     }
+
+    return {
+      status: 200,
+      message: `Products fetched successfully for category: ${category}`,
+      data: categoryProducts,
+    };
   }
 
   async findOne(id: string) {
@@ -145,7 +145,6 @@ export class ProductService {
       data: updatedProduct,
     };
   }
-
 
   async remove(id: string) {
     const existingProduct = await this.productRepo.findOne({ where: { id } });

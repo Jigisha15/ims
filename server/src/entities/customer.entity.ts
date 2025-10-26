@@ -10,10 +10,10 @@ export class Customer {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Column()
+	@Column({ name: "name" })
 	name: string;
 
-	@Column({ name: 'email_id' })
+	@Column({ unique: true, name: 'email_id' })
 	emailId: string;
 
 	@Column({ name: 'phone_number' })
@@ -22,7 +22,7 @@ export class Customer {
 	@Column({ nullable: true })
 	address?: string;
 
-	@Column()
+	@Column({ name: "role" })
 	role: string;
 
 	@CreateDateColumn({ name: 'created_at' })

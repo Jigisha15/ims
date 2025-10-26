@@ -21,6 +21,7 @@ import { UserModule } from './user/user.module';
 import { CompanyModule } from './company/company.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { ProductModule } from './product/product.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { ProductModule } from './product/product.module';
     CompanyModule,
     SupplierModule,
     ProductModule,
+    CustomerModule,
     // add modules here
   ],
   controllers: [AppController],

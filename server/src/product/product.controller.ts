@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, NotFoundException } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -50,7 +50,7 @@ export class ProductController {
   }
 
   @Get("category-wise/:category")
-  findCategoryWise(@Param("categroy") category: CATEGORY) {
+  findCategoryWise(@Param("category") category: CATEGORY) {
     return this.productService.findCategoryWise(category)
   }
 
@@ -60,19 +60,24 @@ export class ProductController {
   }
 
   @Patch('update/:id')
-  @UseInterceptors(FileInterceptor('imageUrl')) // same field name as frontend form-data key
+  @UseInterceptors(FileInterceptor('imageUrl'))
   async updateProduct(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body() updateProductDto: UpdateProductDto,
   ) {
+    const existingProduct = await this.productService.findOne(id);
+    if (!existingProduct) throw new NotFoundException('Product not found');
+
     let imageUrl: string | undefined;
 
     if (file) {
-      const uploadResult = await this.cloudinaryService.uploadImage(
-        file.buffer,
-        'products',
-      );
+      if (existingProduct.data[0].imageUrl) {
+        await this.cloudinaryService.deleteImageByUrl(existingProduct.data[0].imageUrl);
+      }
+
+      //  Upload the new one
+      const uploadResult = await this.cloudinaryService.uploadImage(file.buffer, 'products');
       imageUrl = uploadResult.secure_url;
     }
 
@@ -87,7 +92,6 @@ export class ProductController {
       product: updated.data,
     };
   }
-
 
   @Delete(':id')
   remove(@Param('id') id: string) {
