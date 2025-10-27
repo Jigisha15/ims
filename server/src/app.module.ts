@@ -23,6 +23,8 @@ import { SupplierModule } from './supplier/supplier.module';
 import { ProductModule } from './product/product.module';
 import { CustomerModule } from './customer/customer.module';
 import { QuotationModule } from './quotation/quotation.module';
+import { OrderModule } from './order/order.module';
+import { PurchaseOrderModule } from './purchase-order/purchase-order.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { QuotationModule } from './quotation/quotation.module';
     ProductModule,
     CustomerModule,
     QuotationModule,
+    OrderModule,
+    PurchaseOrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

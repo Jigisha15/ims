@@ -7,13 +7,13 @@ export class OrderItem {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Column()
+	@Column({ name: "quantity" })
 	quantity: number;
 
-	@Column({ type: 'decimal' })
+	@Column({ type: 'decimal', name: "price" })
 	price: number;
 
-	@Column({ type: 'decimal' })
+	@Column({ type: 'decimal', name: "subtotal" })
 	subtotal: number;
 
 	@Column({ name: 'order_id' })

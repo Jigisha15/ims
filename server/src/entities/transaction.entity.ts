@@ -22,4 +22,8 @@ export class Transaction {
 
 	@CreateDateColumn({ name: 'created_at' })
 	createdAt: Date;
+
+	//@OneToOne(() => Payment, payment => payment.transaction)
+	//@JoinColumn({ name: 'payment_id' })
+	//payment: Payment;
 }

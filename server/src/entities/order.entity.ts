@@ -16,7 +16,7 @@ export class Order {
 	@Column({ name: 'date_ordered', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	dateOrdered: Date;
 
-	@Column({ type: 'enum', enum: ORDER_STATUS, default: ORDER_STATUS.PENDING })
+	@Column({ type: 'enum', name: "status", enum: ORDER_STATUS, default: ORDER_STATUS.PENDING })
 	status: ORDER_STATUS;
 
 	@Column({ name: 'total_amount', type: 'decimal' })
