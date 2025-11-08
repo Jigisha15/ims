@@ -1,3 +1,5 @@
+import { Company } from "./interface";
+
 export const dummyProductData = [
 	{
 		"name": "MIG Pro 250",
@@ -65,3 +67,22 @@ export const dummyProductData = [
 		"createdBy": "user-mng-202"
 	}
 ]
+
+export const dummyCompanyData: Company[] = [
+	{
+		name: "TechNova Solutions Pvt Ltd",
+		emailId: "contact@technovasol.com",
+		phoneNumber: "+91 98765 43210",
+		address: "101, Innovator's Hub, Cyber City, Bangalore, 560001",
+		gstin: "29AABBCCDD1234Z5",
+		createdBy: "admin@example.com",
+	},
+	{
+		name: "GreenEarth Organics Inc.",
+		emailId: "sales@greenearthorg.com",
+		phoneNumber: "+1 555-123-4567",
+		address: "45 Sustainable Way, Eco-Friendly Town, CA, 90210, USA",
+		gstin: "99AEEFFGGHH5678I9", // Dummy international format for variation
+		createdBy: "john.doe@techcorp.com",
+	}
+];

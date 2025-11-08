@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription } from "@/components/ui/card"
 import { ProductCardsInterface } from "@/types/interface"
 
-const ProductCards = ({ count, title, color }: ProductCardsInterface) => {
+const CompanyCards = ({ count, title, color }: ProductCardsInterface) => {
 	return (
 		<Card className="w-50 h-30 gap-1 border-0 shadow-none">
 			<CardDescription
@@ -17,4 +17,4 @@ const ProductCards = ({ count, title, color }: ProductCardsInterface) => {
 	)
 }
 
-export default ProductCards
+export default CompanyCards

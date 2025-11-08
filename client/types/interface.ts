@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 
-// PRODUCTS
+// ======================== PRODUCTS ========================
 export interface Product {
 	name: string
 	description: string
@@ -21,8 +21,30 @@ export interface ProductCardsInterface {
 	color: string
 }
 
+export interface ProductInterface {
+	product: Product
+	//company: any
+}
 
-// DATA TABLE
+
+
+
+
+// ======================== COMPANY ========================
+export interface Company {
+	name: string
+	emailId: string
+	phoneNumber: string
+	address: string
+	gstin: string
+	createdBy: string
+}
+
+export interface CompanyInterface {
+	company: Company
+}
+
+// ======================== DATA TABLE ========================
 export interface DataTableProps<TData, TValue> {
 	heading: string
 	columns: ColumnDef<TData, TValue>[]

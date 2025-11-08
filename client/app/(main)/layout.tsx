@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Comic_Neue } from "next/font/google";
 import "../globals.css";
 
 import { Toaster } from "react-hot-toast";
@@ -9,6 +9,12 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+//const comicNeue = Comic_Neue({ variable: "--font-comic-neue", subsets: ["latin"] });
+const comicNeue = Comic_Neue({
+	subsets: ["latin"],
+	weight: ["300", "400", "700"],
+	variable: "--font-comic-neue",
+});
 
 export const metadata: Metadata = {
 	title: "IMS Dashboard",
@@ -17,7 +23,8 @@ export const metadata: Metadata = {
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<div className={`${geistSans.variable} ${geistMono.variable} antialiased  w-full`}>
+		//<div className={`${geistSans.variable} ${geistMono.variable} antialiased  w-full`}>
+		<div className={`${comicNeue.variable} antialiased w-full`}>
 			<SidebarProvider>
 				<AppSidebar />
 				<div>

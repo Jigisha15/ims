@@ -25,6 +25,11 @@ export function AppSidebar() {
 			icon: Package,
 		},
 		{
+			title: "Company",
+			url: "/company",
+			icon: Package,
+		},
+		{
 			title: "Orders",
 			url: "/orders",
 			icon: ListOrdered

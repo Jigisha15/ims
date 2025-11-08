@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({
 			{/* Table */}
 			<div className="overflow-hidden rounded-md border">
 				<div className="flex justify-between border-b px-3">
-					<h1 className="font-semibold text-lg my-5">{heading}</h1>
+					<h1 className="font-bold text-lg my-5">{heading}</h1>
 
 					<div className="relative w-fit my-4">
 						<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />

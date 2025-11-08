@@ -1,5 +1,7 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Abel&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap');*/
 @import "tailwindcss";
 @import "tw-animate-css";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -116,6 +118,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

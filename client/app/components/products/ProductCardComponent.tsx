@@ -20,10 +20,10 @@ const ProductCardComponent = () => {
 	]
 
 	return (
-		<div className="my-5 flex gap-10 items-center bg-gray-100 p-5 rounded-md mr-5">
+		<div className="mt-5 mb-2 flex gap-10 items-center bg-gray-100 p-5 rounded-md mr-5">
 			<div className="">
-				<h1 className="font-semibold text-3xl">Product Stats</h1>
-				<p className="text-gray-800">Stats that give the ultimate glance</p>
+				<h1 className="font-bold text-4xl">Product Stats</h1>
+				<p className="text-gray-700">Quick product overview</p>
 			</div>
 			<div className="flex gap-5">
 				{productCardContent.map((pdc, index: number) => (

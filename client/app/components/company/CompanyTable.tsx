@@ -1,25 +1,24 @@
 "use client"
 
-import { Product } from "@/types/interface"
-import { ColumnDef } from "@tanstack/react-table"
-import { DataTable } from "../data-table/DataTable"
-import { dummyProductData } from "@/types/dummyfile"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { Eye, Plus, SquarePen } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Company } from "@/types/interface"
+import { ColumnDef } from "@tanstack/react-table"
+import { Eye, SquarePen } from "lucide-react"
 import { useState } from "react"
+import { DataTable } from "../data-table/DataTable"
+import { dummyCompanyData } from "@/types/dummyfile"
+import AddCompany from "./operations/AddCompany"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import AddProduct from "./operations/AddProduct"
-import ViewProduct from "./operations/ViewProduct"
-import EditProduct from "./operations/EditProduct"
+import EditCompany from "./operations/EditCompany"
+import ViewCompany from "./operations/ViewCompany"
 
-const ProductTable = () => {
-
+const CompanyTable = () => {
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
 	const [isEditMode, setIsEditMode] = useState<boolean>(false)
-	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+	const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
 
-	const columns: ColumnDef<Product>[] = [
+	const columns: ColumnDef<Company>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -63,7 +62,7 @@ const ProductTable = () => {
 						variant="ghost"
 						className="p-0 hover:bg-inherit"
 						onClick={() => {
-							setSelectedProduct(row.original)
+							setSelectedCompany(row.original)
 							setOpenSheet(true)
 							setIsEditMode(true)
 						}}
@@ -78,36 +77,32 @@ const ProductTable = () => {
 			header: "Name",
 		},
 		{
-			accessorKey: "modelNumber",
-			header: "Model Number",
+			accessorKey: "emailId",
+			header: "Email Id",
 		},
 		{
-			accessorKey: "costPrice",
-			header: "Cost Price",
+			accessorKey: "phoneNumber",
+			header: "Phone Number",
 		},
 		{
-			accessorKey: "sellingPrice",
-			header: "Selling Price",
+			accessorKey: "address",
+			header: "Address",
 		},
 		{
-			accessorKey: "stockQuantity",
-			header: "Quantity",
-		},
-		{
-			accessorKey: "description",
-			header: "Description"
+			accessorKey: "gstin",
+			header: "Gstin",
 		}
 	]
 
 	return (
 		<div className="">
-			<AddProduct />
+			<AddCompany />
 
 			<div className="mr-5">
 				<DataTable
-					heading="Products"
+					heading="Companies"
 					columns={columns}
-					data={dummyProductData}
+					data={dummyCompanyData}
 				/>
 			</div>
 
@@ -118,25 +113,25 @@ const ProductTable = () => {
 							{isEditMode ? "Edit Product" : "Product Details"}
 						</SheetTitle>
 						<SheetDescription className="mt-0 font-semibold">
-							{selectedProduct
-								? `${selectedProduct.name} (${selectedProduct.modelNumber})`
-								: "No product selected"}
+							{selectedCompany
+								? `${selectedCompany.name}`
+								: "No company selected"}
 						</SheetDescription>
 					</SheetHeader>
 
 					<div className="">
-						{selectedProduct ? (
+						{selectedCompany ? (
 							isEditMode ? (
-								<EditProduct
-									product={selectedProduct}
+								<EditCompany
+									company={selectedCompany}
 								/>
 							) : (
-								<ViewProduct
-									product={selectedProduct}
+								<ViewCompany
+									company={selectedCompany}
 								/>
 							)
 						) : (
-							<p className="text-gray-500">Select a product to view.</p>
+							<p className="text-gray-500">Select a company to view.</p>
 						)}
 					</div>
 				</SheetContent>
@@ -145,4 +140,4 @@ const ProductTable = () => {
 	)
 }
 
-export default ProductTable
+export default CompanyTable
