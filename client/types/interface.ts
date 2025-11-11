@@ -31,7 +31,17 @@ export interface ProductInterface {
 
 
 // ======================== COMPANY ========================
-export interface Company {
+export interface CompanyFetchInterface {
+	id: string
+	name: string
+	emailId: string
+	phoneNumber: string
+	address: string
+	gstin: string
+	createdBy: string
+}
+
+export interface CompanyIntakeInterface {
 	name: string
 	emailId: string
 	phoneNumber: string
@@ -41,7 +51,7 @@ export interface Company {
 }
 
 export interface CompanyInterface {
-	company: Company
+	company: CompanyIntakeInterface
 }
 
 // ======================== DATA TABLE ========================

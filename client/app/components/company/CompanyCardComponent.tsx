@@ -1,6 +1,17 @@
+"use client"
+
+import { useGetCompanies } from "@/api/company/company-mutation"
 import CompanyCards from "./CompanyCards"
+import toast from "react-hot-toast"
 
 const CompanyCardComponent = () => {
+	//const { data, isLoading, error } = useGetCompanies()
+
+	//if (isLoading) return <div>Loading...</div>
+	//if (error) return <div>Something went wrong</div>
+
+	//console.log("Fetched Companies:", data?.data)
+
 	const companyCardContent = [
 		{
 			count: 15,

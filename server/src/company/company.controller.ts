@@ -12,7 +12,7 @@ export class CompanyController {
     return this.companyService.create(createCompanyDto);
   }
 
-  @Get()
+  @Get("/get-all")
   findAll() {
     return this.companyService.findAll();
   }
