@@ -3,13 +3,19 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Product } from "@/types/interface"
-import { Plus } from "lucide-react"
+import { CompanyFetchInterface, ProductFetchInterface, ProductIntakeInterface } from "@/types/interface"
+import { ChevronDown, Plus } from "lucide-react"
 import { useState } from "react"
+import InputField from "../../common/InputField"
+import { useAddProduct } from "@/api/products/products-mutation"
+import toast from "react-hot-toast"
+import { useGetCompanies } from "@/api/company/company-mutation"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const AddProduct = () => {
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
-	const [newProduct, setNewProduct] = useState<Product>({
+	const [currentCompany, setCurrentCompany] = useState<CompanyFetchInterface>()
+	const [newProduct, setNewProduct] = useState<ProductIntakeInterface>({
 		name: "",
 		description: "",
 		modelNumber: "",
@@ -22,6 +28,50 @@ const AddProduct = () => {
 		companyId: "",
 		createdBy: ""
 	})
+
+	const resetForm = () => {
+		setNewProduct({
+			name: "",
+			description: "",
+			modelNumber: "",
+			category: "",
+			sellingPrice: 0,
+			stockQuantity: 0,
+			costPrice: 0,
+			minimumQuantity: 0,
+			imageUrl: "",
+			companyId: "",
+			createdBy: ""
+		})
+	}
+
+	const { data, isLoading, error } = useGetCompanies()
+
+	const { mutateAsync: addProductMutation, isPending } = useAddProduct()
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setNewProduct({ ...newProduct, [e.target.name]: e.target.value })
+	}
+
+	const handleAddProduct = async () => {
+		try {
+			// make the payload first
+			const payload = {
+				...newProduct,
+				createdBy: "d57e0910-4bfc-427c-bc7f-ac324d52315d",
+				companyId: currentCompany?.id
+			}
+			await addProductMutation(newProduct)
+
+			toast.success(`Product "${newProduct.name}" added successfully!`)
+
+			setOpenSheet(false)
+			resetForm()
+		} catch (error) {
+			console.error("Error while adding product:", error)
+			toast.error("Error while adding product")
+		}
+	}
 
 	return (
 		<div className="">
@@ -41,63 +91,79 @@ const AddProduct = () => {
 
 					<div className="flex flex-col gap-4">
 						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Name</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.name}
-								className="border rounded-md px-2 py-1 text-base"
+							<InputField
+								label="Name"
+								name="name"
+								value={newProduct.name}
+								onChange={handleChange}
+							/>
+						</div>
+						<div className="flex items-center justify-between gap-5">
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="" className="text-base font-semibold text-gray-600 capitalize">Company</label>
+								<DropdownMenu>
+									<DropdownMenuTrigger className="border py-1 flex items-center justify-between px-5 rounded-md cursor-pointer">Select Company <ChevronDown className="w-5 h-5" /></DropdownMenuTrigger>
+									<DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+										{data.data.map((cmp: CompanyFetchInterface, index: number) => (
+											<DropdownMenuItem onClick={() => setCurrentCompany(cmp)}>{cmp.name}</DropdownMenuItem>
+										))}
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</div>
+							<div className="flex flex-col gap-2 w-full">
+								<InputField
+									label="Category"
+									name="category"
+									value={newProduct.category}
+									onChange={handleChange}
+								/>
+							</div>
+						</div>
+						<div className="flex flex-col gap-2 w-full">
+							<InputField
+								label="Description"
+								name="description"
+								value={newProduct.description}
+								onChange={handleChange}
 							/>
 						</div>
 						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Category</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.category}
-								className="border rounded-md px-2 py-1 text-base"
+							<InputField
+								label="Model Number"
+								name="modelNumber"
+								value={newProduct.modelNumber}
+								onChange={handleChange}
 							/>
+						</div>
+						<div className="flex items-center justify-between gap-5">
+							<div className="flex flex-col gap-2 w-full">
+								<InputField
+									label="Cost Price (Rs.)"
+									name="costPrice"
+									value={`${newProduct.costPrice}`}
+									onChange={handleChange}
+								/>
+							</div>
+							<div className="flex flex-col gap-2 w-full">
+								<InputField
+									label="Selling Price (Rs.)"
+									name="sellingPrice"
+									value={`${newProduct.sellingPrice}`}
+									onChange={handleChange}
+								/>
+							</div>
 						</div>
 						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Description</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.description}
-								className="border rounded-md px-2 py-1 text-base"
+							<InputField
+								label="Stock Quantity"
+								name="stockQuantity"
+								value={`${newProduct.stockQuantity}`}
+								onChange={handleChange}
 							/>
 						</div>
-						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Model Number</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.modelNumber}
-								className="border rounded-md px-2 py-1 text-base"
-							/>
-						</div>
-						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Cost Price</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.costPrice}
-								className="border rounded-md px-2 py-1 text-base"
-							/>
-						</div>
-						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Selling Price</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.costPrice}
-								className="border rounded-md px-2 py-1 text-base"
-							/>
-						</div>
-						<div className="flex flex-col gap-2 w-full">
-							<label className="text-base font-semibold text-gray-600">Stock Quantity</label>
-							<Input
-								type="text"
-								defaultValue={newProduct.stockQuantity}
-								className="border rounded-md px-2 py-1 text-base"
-							/>
-						</div>
+
 						<div className="">
-							<Button>Add Product</Button>
+							<Button onClick={handleAddProduct}>Add Product</Button>
 						</div>
 					</div>
 				</SheetContent>

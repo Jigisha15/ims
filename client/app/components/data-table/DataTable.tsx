@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, SortingState, VisibilityState, ColumnFiltersState, } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ChevronDown, Search } from "lucide-react"
+import { ChevronDown, Download, Search } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { DataTableProps } from "@/types/interface"
@@ -85,17 +85,19 @@ export function DataTable<TData, TValue>({
 
 			{/* Table */}
 			<div className="overflow-hidden rounded-md border">
-				<div className="flex justify-between border-b px-3">
+				<div className="flex items-center justify-between border-b px-3">
 					<h1 className="font-bold text-lg my-5">{heading}</h1>
 
-					<div className="relative w-fit my-4">
-						<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-						<Input
-							placeholder="Search..."
-							value={globalFilter ?? ""}
-							onChange={(e) => setGlobalFilter(e.target.value)}
-							className="pl-9 pr-3 py-2 w-[250px] border rounded-md focus-visible:ring-1 focus-visible:ring-gray-300"
-						/>
+					<div className="">
+						<div className="relative w-fit my-4">
+							<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+							<Input
+								placeholder="Search..."
+								value={globalFilter ?? ""}
+								onChange={(e) => setGlobalFilter(e.target.value)}
+								className="pl-9 pr-3 py-2 w-[250px] border rounded-md focus-visible:ring-1 focus-visible:ring-gray-300"
+							/>
+						</div>
 					</div>
 				</div>
 				<Table>

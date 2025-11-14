@@ -1,7 +1,7 @@
 import { useUpdateProduct } from "@/api/products/products-mutation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { EditProductInterface, ProductFetchInterface, ProductInterface } from "@/types/interface"
+import { CompanyFetchInterface, EditProductInterface, ProductFetchInterface, ProductInterface } from "@/types/interface"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import InputField from "../../common/InputField"
@@ -12,7 +12,11 @@ interface EditCompanyInterface {
 }
 
 const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
-	const [formData, setFormData] = useState({
+	const [currentCompany, setCurrentCompany] = useState<CompanyFetchInterface>()
+	const [UpdatedCompany, setUpdatedCompany] = useState<CompanyFetchInterface>()
+
+	const [formData, setFormData] = useState<ProductFetchInterface>({
+		id: product.id,
 		name: product.name,
 		description: product.description,
 		modelNumber: product.modelNumber,
@@ -20,11 +24,18 @@ const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 		costPrice: product.costPrice,
 		sellingPrice: product.sellingPrice,
 		stockQuantity: product.stockQuantity,
-		minimumQuantity: product.minimumQuantity
+		minimumQuantity: product.minimumQuantity,
+		imageUrl: product.imageUrl,
+		companyId: product.companyId,
+		createdAt: product.createdAt,
+		updatedAt: product.updatedAt,
+		createdBy: product.createdBy,
+		updatedBy: product.updatedBy,
 	})
 
 	const resetForm = () => {
 		setFormData({
+			id: "",
 			name: "",
 			description: "",
 			modelNumber: "",
@@ -32,7 +43,13 @@ const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 			costPrice: 0,
 			sellingPrice: 0,
 			stockQuantity: 0,
-			minimumQuantity: 0
+			minimumQuantity: 0,
+			imageUrl: "",
+			companyId: "",
+			createdAt: "",
+			updatedAt: "",
+			createdBy: "",
+			updatedBy: "",
 		})
 	}
 
@@ -51,6 +68,7 @@ const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 			toast.success(`Product "${formData.name}" updated successfully!`)
 
 			setOpenSheet(false)
+			resetForm()
 		} catch (error) {
 			console.error("Error while updating product:", error)
 			toast.error("Error while updating product")

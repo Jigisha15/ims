@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { addProduct, deleteProduct, getCategoryWiseProducts, getOneProduct, getProducts, updateProduct } from "./products"
 import { ProductIntakeInterface } from "@/types/interface"
-import { deleteCompany } from "../company/company"
 
 export const useGetProducts = () => {
 	return useQuery({
