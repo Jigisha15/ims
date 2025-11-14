@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { CompanyFetchInterface, CompanyInterface } from "@/types/interface"
 import { useState } from "react"
 import toast from "react-hot-toast"
-import InputField from "../InputField"
+import InputField from "../../common/InputField"
 
 
 interface EditCompanyInterface {
