@@ -1,72 +1,130 @@
+import { useUpdateProduct } from "@/api/products/products-mutation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ProductInterface } from "@/types/interface"
+import { EditProductInterface, ProductFetchInterface, ProductInterface } from "@/types/interface"
+import { useState } from "react"
+import toast from "react-hot-toast"
+import InputField from "../../company/InputField"
 
-const EditProduct = ({ product }: ProductInterface) => {
+interface EditCompanyInterface {
+	product: ProductFetchInterface
+	setOpenSheet: (vl: boolean) => void
+}
+
+const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
+	const [formData, setFormData] = useState({
+		name: product.name,
+		description: product.description,
+		modelNumber: product.modelNumber,
+		category: product.category,
+		costPrice: product.costPrice,
+		sellingPrice: product.sellingPrice,
+		stockQuantity: product.stockQuantity,
+		minimumQuantity: product.minimumQuantity
+	})
+
+	const resetForm = () => {
+		setFormData({
+			name: "",
+			description: "",
+			modelNumber: "",
+			category: "",
+			costPrice: 0,
+			sellingPrice: 0,
+			stockQuantity: 0,
+			minimumQuantity: 0
+		})
+	}
+
+	const { mutateAsync: updateProductMutation, isPending } = useUpdateProduct()
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value })
+	}
+
+	const handleUpdateProduct = async () => {
+		try {
+			await updateProductMutation({
+				productId: product.id,
+				updateData: formData,
+			})
+			toast.success(`Product "${formData.name}" updated successfully!`)
+
+			setOpenSheet(false)
+		} catch (error) {
+			console.error("Error while updating product:", error)
+			toast.error("Error while updating product")
+		}
+	}
+
 	return (
 		<div className="flex flex-col gap-4">
 			{/* Editable inputs */}
 			<div className="flex gap-5">
 				<div className="flex flex-col gap-2 w-full">
-					<label className="text-base font-semibold text-gray-600">Name</label>
-					<Input
-						type="text"
-						defaultValue={product.name}
-						className="border rounded-md px-2 py-1 text-base"
+					<InputField
+						label="Name"
+						name="name"
+						value={formData.name}
+						onChange={handleChange}
 					/>
 				</div>
 				<div className="flex flex-col gap-2 w-full">
-					<label className="text-base font-semibold text-gray-600">Category</label>
-					<Input
-						type="text"
-						defaultValue={product.name}
-						className="border rounded-md px-2 py-1 text-base"
+					<InputField
+						label="Category"
+						name="category"
+						value={formData.category}
+						onChange={handleChange}
 					/>
 				</div>
 			</div>
 			<div className="flex flex-col gap-2">
-				<label className="text-base font-semibold text-gray-600">Description</label>
-				<Input
-					type="text"
-					defaultValue={product.description}
-					className="border rounded-md px-2 py-1 text-base"
+				<InputField
+					label="Description"
+					name="description"
+					value={formData.description}
+					onChange={handleChange}
 				/>
 			</div>
 			<div className="flex flex-col gap-2">
-				<label className="text-base font-semibold text-gray-600">Model Number</label>
-				<Input
-					type="text"
-					defaultValue={product.modelNumber}
-					className="border rounded-md px-2 py-1 text-base"
+				<InputField
+					label="Model Number"
+					name="modelNumber"
+					value={formData.modelNumber}
+					onChange={handleChange}
 				/>
 			</div>
 			<div className="flex flex-col gap-2">
-				<label className="text-base font-semibold text-gray-600">Cost Price</label>
-				<Input
-					type="number"
-					defaultValue={product.costPrice}
-					className="border rounded-md px-2 py-1 text-base"
+				<InputField
+					label="Cost Price"
+					name="costPrice"
+					value={`${formData.costPrice}`}
+					onChange={handleChange}
 				/>
 			</div>
 			<div className="flex flex-col gap-2">
-				<label className="text-base font-semibold text-gray-600">Selling Price</label>
-				<Input
-					type="number"
-					defaultValue={product.sellingPrice}
-					className="border rounded-md px-2 py-1 text-base"
+				<InputField
+					label="Selling Price"
+					name="sellingPrice"
+					value={`${formData.sellingPrice}`}
+					onChange={handleChange}
 				/>
 			</div>
 			<div className="flex flex-col gap-2">
-				<label className="text-base font-semibold text-gray-600">Stock Quantity</label>
-				<Input
-					type="number"
-					defaultValue={product.stockQuantity}
-					className="border rounded-md px-2 py-1 text-base"
+				<InputField
+					label="Stock Quantity"
+					name="stockQuantity"
+					value={`${formData.stockQuantity}`}
+					onChange={handleChange}
 				/>
 			</div>
 			<div className="my-5">
-				<Button className="w-full bg-green-700 hover:bg-green-800">
-					Save Changes
+				<Button
+					className="w-full bg-green-700 hover:bg-green-800"
+					onClick={handleUpdateProduct}
+					disabled={isPending}
+				>
+					{isPending ? "Saving..." : "Save Changes"}
 				</Button>
 			</div>
 		</div>

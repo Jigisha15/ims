@@ -3,7 +3,11 @@ import axios from "axios";
 
 export const getCompanies = async () => {
 	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/company/get-all`)
-	console.log("Response from backend:", response)
+	return response.data
+}
+
+export const getOneCompany = async (companyId: string) => {
+	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/company/:${companyId}`)
 	return response.data
 }
 

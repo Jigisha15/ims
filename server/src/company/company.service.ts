@@ -44,7 +44,7 @@ export class CompanyService {
   async findAll() {
     const companies = await this.companyRepo.find({
       order: { createdAt: 'DESC' },
-      relations: ['createdUser'], // optional if you want user info
+      relations: ['createdUser'],
     });
 
     if (companies.length <= 0) {

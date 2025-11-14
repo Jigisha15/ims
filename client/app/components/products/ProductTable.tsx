@@ -1,25 +1,33 @@
 "use client"
 
-import { Product } from "@/types/interface"
+import { ProductFetchInterface, ProductIntakeInterface } from "@/types/interface"
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "../data-table/DataTable"
 import { dummyProductData } from "@/types/dummyfile"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { Eye, Plus, SquarePen } from "lucide-react"
+import { Eye, Plus, SquarePen, Trash } from "lucide-react"
 import { useState } from "react"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import AddProduct from "./operations/AddProduct"
 import ViewProduct from "./operations/ViewProduct"
 import EditProduct from "./operations/EditProduct"
+import { useGetProducts } from "@/api/products/products-mutation"
+import DeleteProduct from "./operations/DeleteProduct"
 
 const ProductTable = () => {
 
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
+	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [isEditMode, setIsEditMode] = useState<boolean>(false)
-	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+	const [selectedProduct, setSelectedProduct] = useState<ProductFetchInterface | null>(null)
 
-	const columns: ColumnDef<Product>[] = [
+	const { data, isLoading, error } = useGetProducts()
+
+	if (isLoading) return <div>Loading...</div> // TODO: Replace with Skeleton
+	if (error) return <div>Something went wrong</div>
+
+	const columns: ColumnDef<ProductFetchInterface>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -70,6 +78,16 @@ const ProductTable = () => {
 					>
 						<SquarePen className="w-5 h-5" />
 					</Button>
+					<Button
+						variant="ghost"
+						className="p-0 hover:bg-inherit"
+						onClick={() => {
+							setSelectedProduct(row.original)
+							setOpenModal(true)
+						}}
+					>
+						<Trash className="w-5 h-5" />
+					</Button>
 				</div>
 			)
 		},
@@ -107,9 +125,15 @@ const ProductTable = () => {
 				<DataTable
 					heading="Products"
 					columns={columns}
-					data={dummyProductData}
+					data={data.data}
 				/>
 			</div>
+
+			<DeleteProduct
+				openModal={openModal}
+				setOpenModal={setOpenModal}
+				selectedProduct={selectedProduct!}
+			/>
 
 			<Sheet open={openSheet} onOpenChange={setOpenSheet}>
 				<SheetContent className="w-1/2 sm:max-w-none px-5">
@@ -129,6 +153,7 @@ const ProductTable = () => {
 							isEditMode ? (
 								<EditProduct
 									product={selectedProduct}
+									setOpenSheet={setOpenSheet}
 								/>
 							) : (
 								<ViewProduct

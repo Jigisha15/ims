@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 // ======================== PRODUCTS ========================
-export interface Product {
+export interface ProductIntakeInterface {
 	name: string
 	description: string
 	modelNumber: string
@@ -15,6 +15,24 @@ export interface Product {
 	createdBy: string
 }
 
+export interface ProductFetchInterface {
+	id: string
+	name: string
+	description: string
+	modelNumber: string
+	category: string
+	costPrice: number
+	sellingPrice: number
+	stockQuantity: number
+	minimumQuantity: number
+	imageUrl: string
+	companyId: string
+	createdAt: string
+	updatedAt: string
+	createdBy: string
+	updatedBy: string
+}
+
 export interface ProductCardsInterface {
 	count: number
 	title: string
@@ -22,8 +40,13 @@ export interface ProductCardsInterface {
 }
 
 export interface ProductInterface {
-	product: Product
+	product: ProductIntakeInterface
 	//company: any
+}
+
+export interface EditProductInterface {
+	product: ProductFetchInterface
+	productId: string
 }
 
 
