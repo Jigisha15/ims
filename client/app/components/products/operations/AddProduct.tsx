@@ -1,20 +1,21 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { CompanyFetchInterface, ProductFetchInterface, ProductIntakeInterface } from "@/types/interface"
+import { CategoryFetchInterface, CompanyFetchInterface, ProductIntakeInterface } from "@/types/interface"
 import { ChevronDown, Plus } from "lucide-react"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import InputField from "../../common/InputField"
 import { useAddProduct } from "@/api/products/products-mutation"
 import toast from "react-hot-toast"
 import { useGetCompanies } from "@/api/company/company-mutation"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useGetCategories } from "@/api/category/category-mutation"
 
 const AddProduct = () => {
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
 	const [currentCompany, setCurrentCompany] = useState<CompanyFetchInterface>()
+	const [currentCategory, setCurrentCategory] = useState<CategoryFetchInterface>()
 	const [newProduct, setNewProduct] = useState<ProductIntakeInterface>({
 		name: "",
 		description: "",
@@ -45,11 +46,12 @@ const AddProduct = () => {
 		})
 	}
 
-	const { data, isLoading, error } = useGetCompanies()
+	const { data: companiesData, isLoading: companiesLoading, error: companiesError } = useGetCompanies()
+	const { data: categoriesData, isLoading: categoriesLoading, error: categoriesError } = useGetCategories()
 
 	const { mutateAsync: addProductMutation, isPending } = useAddProduct()
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setNewProduct({ ...newProduct, [e.target.name]: e.target.value })
 	}
 
@@ -58,10 +60,11 @@ const AddProduct = () => {
 			// make the payload first
 			const payload = {
 				...newProduct,
+				category: currentCategory?.id!,
 				createdBy: "d57e0910-4bfc-427c-bc7f-ac324d52315d",
-				companyId: currentCompany?.id
+				companyId: currentCompany?.id!
 			}
-			await addProductMutation(newProduct)
+			await addProductMutation(payload)
 
 			toast.success(`Product "${newProduct.name}" added successfully!`)
 
@@ -104,19 +107,26 @@ const AddProduct = () => {
 								<DropdownMenu>
 									<DropdownMenuTrigger className="border py-1 flex items-center justify-between px-5 rounded-md cursor-pointer">Select Company <ChevronDown className="w-5 h-5" /></DropdownMenuTrigger>
 									<DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
-										{data.data.map((cmp: CompanyFetchInterface, index: number) => (
-											<DropdownMenuItem onClick={() => setCurrentCompany(cmp)}>{cmp.name}</DropdownMenuItem>
+										{(companiesData?.data ?? []).map((cmp: CompanyFetchInterface, index: number) => (
+											<DropdownMenuItem key={index} onClick={() => setCurrentCompany(cmp)}>
+												{cmp.name}
+											</DropdownMenuItem>
 										))}
 									</DropdownMenuContent>
 								</DropdownMenu>
 							</div>
 							<div className="flex flex-col gap-2 w-full">
-								<InputField
-									label="Category"
-									name="category"
-									value={newProduct.category}
-									onChange={handleChange}
-								/>
+								<label htmlFor="" className="text-base font-semibold text-gray-600 capitalize">Category</label>
+								<DropdownMenu>
+									<DropdownMenuTrigger className="border py-1 flex items-center justify-between px-5 rounded-md cursor-pointer">Select Category <ChevronDown className="w-5 h-5" /></DropdownMenuTrigger>
+									<DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+										{(categoriesData?.data ?? []).map((cat: CategoryFetchInterface, index: number) => (
+											<DropdownMenuItem key={index} onClick={() => setCurrentCategory(cat)}>
+												{cat.name}
+											</DropdownMenuItem>
+										))}
+									</DropdownMenuContent>
+								</DropdownMenu>
 							</div>
 						</div>
 						<div className="flex flex-col gap-2 w-full">

@@ -2,12 +2,10 @@
 
 import { useUpdateCompany } from "@/api/company/company-mutation"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { CompanyFetchInterface, CompanyInterface } from "@/types/interface"
-import { useState } from "react"
+import { CompanyFetchInterface } from "@/types/interface"
+import { ChangeEvent, useState } from "react"
 import toast from "react-hot-toast"
 import InputField from "../../common/InputField"
-
 
 interface EditCompanyInterface {
 	company: CompanyFetchInterface
@@ -33,10 +31,9 @@ const EditCompany = ({ company, setOpenSheet }: EditCompanyInterface) => {
 		})
 	}
 
-
 	const { mutateAsync: updateCompanyMutation, isPending } = useUpdateCompany()
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
 

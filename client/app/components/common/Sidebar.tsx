@@ -16,6 +16,7 @@ export function AppSidebar() {
 		{ title: "Orders", url: "/orders", icon: ListOrdered },
 		{ title: "Purchase Orders", url: "#", icon: PackagePlus },
 		{ title: "Quotations", url: "#", icon: TableProperties },
+		{ title: "Category", url: "/category", icon: TableProperties },
 	];
 
 	return (

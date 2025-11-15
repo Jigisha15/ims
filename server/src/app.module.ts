@@ -25,6 +25,8 @@ import { CustomerModule } from './customer/customer.module';
 import { QuotationModule } from './quotation/quotation.module';
 import { OrderModule } from './order/order.module';
 import { PurchaseOrderModule } from './purchase-order/purchase-order.module';
+import { CategoryModule } from './category/category.module';
+import { Category } from './entities/category.entity';
 
 @Module({
   imports: [
@@ -45,7 +47,8 @@ import { PurchaseOrderModule } from './purchase-order/purchase-order.module';
         Transaction,
         Payment,
         Customer,
-        Supplier
+        Supplier,
+        Category
       ],
       synchronize: true,
       ssl: {
@@ -61,6 +64,7 @@ import { PurchaseOrderModule } from './purchase-order/purchase-order.module';
     QuotationModule,
     OrderModule,
     PurchaseOrderModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

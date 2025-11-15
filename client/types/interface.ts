@@ -77,6 +77,28 @@ export interface CompanyInterface {
 	company: CompanyIntakeInterface
 }
 
+
+
+
+
+// ======================== CATEGORY ========================
+export interface CategoryFetchInterface {
+	id: string
+	name: string
+	products: ProductFetchInterface[]
+}
+
+export interface CategoryIntakeInterface {
+	name: string
+	products: ProductIntakeInterface[]
+}
+
+
+
+
+
+
+
 // ======================== DATA TABLE ========================
 export interface DataTableProps<TData, TValue> {
 	heading: string

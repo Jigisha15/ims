@@ -1,33 +1,31 @@
 "use client"
 
-import { ProductFetchInterface, ProductIntakeInterface } from "@/types/interface"
-import { ColumnDef } from "@tanstack/react-table"
-import { DataTable } from "../data-table/DataTable"
-import { dummyProductData } from "@/types/dummyfile"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useGetCategories } from "@/api/category/category-mutation"
 import { Button } from "@/components/ui/button"
-import { Eye, Plus, SquarePen, Trash } from "lucide-react"
-import { useState } from "react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { CategoryFetchInterface } from "@/types/interface"
+import { ColumnDef } from "@tanstack/react-table"
+import { Eye, SquarePen, Trash } from "lucide-react"
+import { SetStateAction, useState } from "react"
+import { DataTable } from "../data-table/DataTable"
+import AddCategory from "./operations/AddCategory"
+import DeleteCategory from "./operations/DeleteCategory"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import AddProduct from "./operations/AddProduct"
-import ViewProduct from "./operations/ViewProduct"
-import EditProduct from "./operations/EditProduct"
-import { useGetProducts } from "@/api/products/products-mutation"
-import DeleteProduct from "./operations/DeleteProduct"
+import EditCategory from "./operations/EditCategory"
+import ViewCategory from "./operations/ViewCategory"
 
-const ProductTable = () => {
-
+const CategoryTable = () => {
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
 	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [isEditMode, setIsEditMode] = useState<boolean>(false)
-	const [selectedProduct, setSelectedProduct] = useState<ProductFetchInterface | null>(null)
+	const [selectedCategory, setSelectedCategory] = useState<CategoryFetchInterface | null>(null)
 
-	const { data, isLoading, error } = useGetProducts()
+	const { data, isLoading, error } = useGetCategories()
 
 	if (isLoading) return <div>Loading...</div> // TODO: Replace with Skeleton
 	if (error) return <div>Something went wrong</div>
 
-	const columns: ColumnDef<ProductFetchInterface>[] = [
+	const columns: ColumnDef<CategoryFetchInterface>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -56,12 +54,13 @@ const ProductTable = () => {
 			accessorKey: "action",
 			header: "Actions",
 			cell: ({ row }) => (
-				<div className="flex">
+				<div className="flex gap-0">
 					<Button
 						variant="ghost"
 						className="p-0 m-0 hover:bg-inherit"
 						onClick={() => {
 							setIsEditMode(false)
+							setSelectedCategory(row.original)
 							setOpenSheet(true)
 						}}
 					>
@@ -71,7 +70,7 @@ const ProductTable = () => {
 						variant="ghost"
 						className="p-0 hover:bg-inherit"
 						onClick={() => {
-							setSelectedProduct(row.original)
+							setSelectedCategory(row.original)
 							setOpenSheet(true)
 							setIsEditMode(true)
 						}}
@@ -82,7 +81,7 @@ const ProductTable = () => {
 						variant="ghost"
 						className="p-0 hover:bg-inherit"
 						onClick={() => {
-							setSelectedProduct(row.original)
+							setSelectedCategory(row.original)
 							setOpenModal(true)
 						}}
 					>
@@ -91,77 +90,76 @@ const ProductTable = () => {
 				</div>
 			)
 		},
+		{ accessorKey: "name", header: "Name" },
 		{
-			accessorKey: "name",
-			header: "Name",
+			accessorKey: "products",
+			header: "Products",
+			cell: ({ row }) => (
+				<div className="">
+					{!row.original.products.length ? (
+						<div className="font-base text-gray-500 italic">No products available for this category</div>
+					) : (
+						<div className="">
+							{row.original.products
+								?.slice(0, 2)
+								.map((prod, index) => (
+									<span key={index}>
+										{prod.name}
+										{index !== 1 && row.original.products.length > 1 ? ", " : ""}
+									</span>
+								))}
+
+							{row.original.products?.length > 2 && " ..."}
+						</div>
+					)}
+				</div>
+			)
 		},
-		{
-			accessorKey: "modelNumber",
-			header: "Model Number",
-		},
-		{
-			accessorKey: "costPrice",
-			header: "Cost Price",
-		},
-		{
-			accessorKey: "sellingPrice",
-			header: "Selling Price",
-		},
-		{
-			accessorKey: "stockQuantity",
-			header: "Quantity",
-		},
-		{
-			accessorKey: "description",
-			header: "Description"
-		}
 	]
 
 	return (
-		<div className="">
-			<AddProduct />
+		<div className="py-5">
+			<AddCategory />
 
 			<div className="mr-5">
 				<DataTable
-					heading="Products"
+					heading="Categories"
 					columns={columns}
-					data={data || []}
+					data={data?.data || []}
 				/>
 			</div>
 
-			<DeleteProduct
+			<DeleteCategory
 				openModal={openModal}
 				setOpenModal={setOpenModal}
-				selectedProduct={selectedProduct!}
+				selectedCategory={selectedCategory!}
 			/>
 
 			<Sheet open={openSheet} onOpenChange={setOpenSheet}>
 				<SheetContent className="w-1/2 sm:max-w-none px-5">
-					<SheetHeader className="">
+					<SheetHeader>
 						<SheetTitle className="text-xl font-semibold mb-0">
-							{isEditMode ? "Edit Product" : "Product Details"}
+							{isEditMode ? "Edit Company" : "Company Details"}
 						</SheetTitle>
 						<SheetDescription className="mt-0 font-semibold">
-							{selectedProduct
-								? `${selectedProduct.name} (${selectedProduct.modelNumber})`
-								: "No product selected"}
+							{selectedCategory
+								? `${selectedCategory.name}`
+								: "No category selected"}
 						</SheetDescription>
 					</SheetHeader>
 
-					<div className="">
-						{selectedProduct ? (
+					<div>
+						{selectedCategory ? (
 							isEditMode ? (
-								<EditProduct
-									product={selectedProduct}
+								<EditCategory
+									category={selectedCategory}
 									setOpenSheet={setOpenSheet}
 								/>
 							) : (
-								<ViewProduct
-									product={selectedProduct}
-								/>
+								<ViewCategory category={selectedCategory!} />
 							)
 						) : (
-							<p className="text-gray-500">Select a product to view.</p>
+							<p className="text-gray-500">Select a company to view.</p>
 						)}
 					</div>
 				</SheetContent>
@@ -170,4 +168,4 @@ const ProductTable = () => {
 	)
 }
 
-export default ProductTable
+export default CategoryTable

@@ -1,8 +1,10 @@
+"use client"
+
 import { useUpdateProduct } from "@/api/products/products-mutation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CompanyFetchInterface, EditProductInterface, ProductFetchInterface, ProductInterface } from "@/types/interface"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import toast from "react-hot-toast"
 import InputField from "../../common/InputField"
 
@@ -55,7 +57,7 @@ const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 
 	const { mutateAsync: updateProductMutation, isPending } = useUpdateProduct()
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
 

@@ -4,7 +4,7 @@ import { Company } from './company.entity';
 import { QuotationItem } from './quotation-item.entity';
 import { OrderItem } from './order-item.entity';
 import { PurchaseOrderItem } from './purchase-order-item.entity';
-import { CATEGORY } from './enum';
+import { Category } from './category.entity';
 
 @Entity('product')
 export class Product {
@@ -20,8 +20,8 @@ export class Product {
 	@Column({ name: 'model_number' })
 	modelNumber: string;
 
-	@Column({ type: 'enum', enum: CATEGORY })
-	category: CATEGORY;
+	//@Column({ type: 'enum', enum: CATEGORY })
+	//category: CATEGORY;
 
 	@Column({ name: 'cost_price', type: 'decimal' })
 	costPrice: number;
@@ -64,6 +64,13 @@ export class Product {
 	@ManyToOne(() => Company, company => company.products)
 	@JoinColumn({ name: 'company_id' })
 	company: Company;
+
+	@Column({ name: 'category_id' })
+	categoryId: string;
+
+	@ManyToOne(() => Category, category => category.products)
+	@JoinColumn({ name: 'category_id' })
+	category: Category;
 
 	@OneToMany(() => QuotationItem, qi => qi.product)
 	quotationItems: QuotationItem[];

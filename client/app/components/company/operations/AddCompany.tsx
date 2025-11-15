@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { CompanyIntakeInterface } from "@/types/interface"
 import { Plus } from "lucide-react"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import toast from "react-hot-toast"
 
 const AddCompany = () => {
@@ -36,7 +36,7 @@ const AddCompany = () => {
 
 	const { mutateAsync: addCompanyMutation, isPending } = useAddCompany()
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setNewCompany({ ...newCompany, [e.target.name]: e.target.value })
 	}
 

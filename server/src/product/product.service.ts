@@ -4,13 +4,11 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from 'src/entities/product.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CATEGORY } from 'src/entities/enum';
 import { User } from 'src/entities/user.entity';
 import { Company } from 'src/entities/company.entity';
 
 @Injectable()
 export class ProductService {
-
   constructor(
     @InjectRepository(Product)
     private readonly productRepo: Repository<Product>,
@@ -22,142 +20,118 @@ export class ProductService {
     private readonly userRepo: Repository<User>,
   ) { }
 
-  async create(createProductDto: CreateProductDto & { imageUrl?: string }) {
-    const { name, description, modelNumber, category, imageUrl, costPrice, sellingPrice, stockQuantity, companyId, createdBy } = createProductDto
+  /** CREATE */
+  async create(dto: CreateProductDto & { imageUrl?: string }) {
+    const { name, modelNumber, companyId, categoryId, createdBy } = dto;
 
-    const existingProduct = await this.productRepo.find({
+    // Check duplicates
+    const exists = await this.productRepo.findOne({
       where: [
         { name },
-        { category },
         { modelNumber },
       ]
-    })
-    console.log("existingProduct : ", existingProduct)
-    if (existingProduct.length > 0) {
-      throw new BadRequestException('Product with either same name, category or modelNumber already exists');
+    });
+
+    if (exists) {
+      throw new BadRequestException("Product with same name or model number already exists");
     }
 
-    // find company
-    const companyExists = await this.companyRepo.find({
-      where: { id: companyId }
-    })
+    // Validate category
 
-    if (!companyExists) {
-      throw new BadRequestException("Company not found")
-    }
 
-    // find user
-    const userExists = await this.userRepo.find({
-      where: { id: createdBy }
-    })
+    // Validate company
+    const company = await this.companyRepo.findOne({ where: { id: companyId } });
+    if (!company) throw new BadRequestException("Company not found");
 
-    if (!userExists) {
-      throw new BadRequestException("User not found")
-    }
+    // Validate user
+    const user = await this.userRepo.findOne({ where: { id: createdBy } });
+    if (!user) throw new BadRequestException("User not found");
 
-    const newProduct = this.productRepo.create(createProductDto)
-    const savedProduct = await this.productRepo.save(newProduct)
+    const product = this.productRepo.create(dto);
+    const saved = await this.productRepo.save(product);
 
     return {
       status: 201,
-      message: 'Product created successfully!',
-      company: savedProduct,
+      message: "Product created successfully",
+      data: saved,
     };
   }
 
+  /** FIND ALL */
   async findAll() {
     const products = await this.productRepo.find({
+      relations: ["company", "category"],
       order: { createdAt: 'DESC' },
     });
-
-    if (products.length <= 0) {
-      return {
-        status: 200,
-        message: 'No products exist',
-        data: products,
-      };
-    } else {
-      return {
-        status: 200,
-        message: 'Products fetched successfully',
-        data: products,
-      };
-    }
-  }
-
-  async findCategoryWise(category: CATEGORY) {
-    const categoryProducts = await this.productRepo.find({
-      where: { category },
-      order: { createdAt: 'DESC' },
-    });
-
-    if (!categoryProducts || categoryProducts.length === 0) {
-      return {
-        status: 200,
-        message: `No products found in category: ${category}`,
-        data: [],
-      };
-    }
 
     return {
       status: 200,
-      message: `Products fetched successfully for category: ${category}`,
-      data: categoryProducts,
+      message: "Products fetched successfully",
+      data: products,
     };
   }
 
-  async findOne(id: string) {
-    const product = await this.productRepo.find({
-      where: { id }
+  /** FIND CATEGORY-WISE */
+  async findCategoryWise(categoryId: string) {
+    const products = await this.productRepo.find({
+      where: { categoryId },
+      order: { createdAt: "DESC" },
     });
-
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
 
     return {
       status: 200,
-      message: 'Product fetched successfully',
+      message: "Products fetched successfully",
+      data: products,
+    };
+  }
+
+  /** FIND ONE (formatted) */
+  async findOne(id: string) {
+    const product = await this.productRepo.findOne({
+      where: { id },
+      relations: ["company", "category"],
+    });
+
+    if (!product) throw new NotFoundException("Product not found");
+
+    return {
+      status: 200,
+      message: "Product fetched successfully",
       data: product,
     };
   }
 
-  async update(
-    id: string,
-    updateProductDto: UpdateProductDto & { imageUrl?: string },
-  ) {
-    const existingProduct = await this.productRepo.findOne({ where: { id } });
+  /** INTERNAL: RAW */
+  async findOneRaw(id: string) {
+    return this.productRepo.findOne({ where: { id } });
+  }
 
-    if (!existingProduct) {
-      throw new NotFoundException('Product not found');
-    }
-
+  /** UPDATE */
+  async update(id: string, dto: UpdateProductDto & { imageUrl?: string }) {
     await this.productRepo.update(id, {
-      ...updateProductDto,
+      ...dto,
       updatedAt: new Date(),
     });
 
-    const updatedProduct = await this.productRepo.findOne({ where: { id } });
+    const updated = await this.findOneRaw(id);
 
     return {
       status: 200,
-      message: 'Product updated successfully',
-      data: updatedProduct,
+      message: "Product updated successfully",
+      data: updated,
     };
   }
 
+  /** DELETE */
   async remove(id: string) {
-    const existingProduct = await this.productRepo.findOne({ where: { id } });
-
-    if (!existingProduct) {
-      throw new NotFoundException('Product not found');
-    }
+    const exists = await this.findOneRaw(id);
+    if (!exists) throw new NotFoundException("Product not found");
 
     await this.productRepo.delete(id);
 
     return {
       status: 200,
-      message: 'Product deleted successfully',
+      message: "Product deleted successfully",
     };
   }
 }

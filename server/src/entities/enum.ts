@@ -1,7 +1,7 @@
-export enum CATEGORY {
-	MACHINE1 = 'machine1',
-	MACHINE2 = 'machine2',
-}
+//export enum CATEGORY {
+//	MACHINE1 = 'machine1',
+//	MACHINE2 = 'machine2',
+//}
 
 export enum ORDER_STATUS {
 	PENDING = 'PENDING',

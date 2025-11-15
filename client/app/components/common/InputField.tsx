@@ -1,4 +1,6 @@
-import React from "react"
+"use client"
+
+import React, { ChangeEvent, FC } from "react"
 import { Input } from "@/components/ui/input"
 
 interface InputFieldProps {
@@ -6,14 +8,14 @@ interface InputFieldProps {
 	name: string
 	type?: string
 	value: string
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+	onChange: (e: ChangeEvent<HTMLInputElement>) => void
 	className?: string
 	containerClassName?: string
 	placeholder?: string
 	disabled?: boolean
 }
 
-const InputField: React.FC<InputFieldProps> = ({
+const InputField: FC<InputFieldProps> = ({
 	label,
 	name,
 	type = "text",

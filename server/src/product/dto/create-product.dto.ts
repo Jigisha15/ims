@@ -1,5 +1,4 @@
 import { IsString, IsOptional, IsEnum, IsNumber, IsUUID, IsNotEmpty, IsPositive } from 'class-validator';
-import { CATEGORY } from "../../entities/enum"
 
 export class CreateProductDto {
 	@IsString()
@@ -13,10 +12,6 @@ export class CreateProductDto {
 	@IsString()
 	@IsNotEmpty()
 	modelNumber: string;
-
-	@IsEnum(CATEGORY)
-	@IsNotEmpty()
-	category: CATEGORY;
 
 	@IsNumber()
 	@IsPositive()
@@ -41,6 +36,10 @@ export class CreateProductDto {
 	@IsUUID()
 	@IsNotEmpty()
 	companyId: string;
+
+	@IsUUID()
+	@IsNotEmpty()
+	categoryId: string;
 
 	@IsUUID()
 	@IsNotEmpty()
