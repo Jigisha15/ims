@@ -14,6 +14,7 @@ import ViewProduct from "./operations/ViewProduct"
 import EditProduct from "./operations/EditProduct"
 import { useGetProducts } from "@/api/products/products-mutation"
 import DeleteProduct from "./operations/DeleteProduct"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const ProductTable = () => {
 
@@ -56,37 +57,40 @@ const ProductTable = () => {
 			accessorKey: "action",
 			header: "Actions",
 			cell: ({ row }) => (
-				<div className="flex">
+				<div className="flex gap-1">
 					<Button
 						variant="ghost"
-						className="p-0 m-0 hover:bg-inherit"
+						className="p-0 m-0 hover:bg-inherit w-1"
 						onClick={() => {
 							setIsEditMode(false)
 							setOpenSheet(true)
 						}}
+						title="View"
 					>
-						<Eye className="w-5 h-5" />
+						<Eye className="w-5 h-5 m-0 p-0" />
 					</Button>
 					<Button
 						variant="ghost"
-						className="p-0 hover:bg-inherit"
+						className="p-0 hover:bg-inherit w-1"
 						onClick={() => {
 							setSelectedProduct(row.original)
 							setOpenSheet(true)
 							setIsEditMode(true)
 						}}
+						title="Edit"
 					>
-						<SquarePen className="w-5 h-5" />
+						<SquarePen className="w-5 h-5 m-0 p-0" />
 					</Button>
 					<Button
 						variant="ghost"
-						className="p-0 hover:bg-inherit"
+						className="p-0 hover:bg-inherit w-1"
 						onClick={() => {
 							setSelectedProduct(row.original)
 							setOpenModal(true)
 						}}
+						title="Delete"
 					>
-						<Trash className="w-5 h-5" />
+						<Trash className="w-5 h-5 m-0 p-0" />
 					</Button>
 				</div>
 			)
@@ -94,27 +98,49 @@ const ProductTable = () => {
 		{
 			accessorKey: "name",
 			header: "Name",
+			cell: ({ row }) => (
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger className="cursor-pointer">
+							{row.original.name}
+						</TooltipTrigger>
+						<TooltipContent className="max-w-xs">
+							<p>{row.original.description}</p>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			),
 		},
 		{
-			accessorKey: "modelNumber",
-			header: "Model Number",
+			//accessorKey: "Category",
+			header: "Category",
+			cell: ({ row }) => (
+				<div className="">{row.original.category.name}</div>
+			)
 		},
+		//{
+		//	accessorKey: "modelNumber",
+		//	header: "Model Number",
+		//},
+		//{
+		//	accessorKey: "costPrice",
+		//	header: "Cost Price",
+		//},
+		//{
+		//	accessorKey: "sellingPrice",
+		//	header: "Selling Price",
+		//},
 		{
-			accessorKey: "costPrice",
-			header: "Cost Price",
-		},
-		{
-			accessorKey: "sellingPrice",
-			header: "Selling Price",
+			accessorKey: "company",
+			header: "Company",
+			cell: ({ row }) => (
+				<div className="">{row.original.company.name}</div>
+			)
 		},
 		{
 			accessorKey: "stockQuantity",
-			header: "Quantity",
+			header: "Qty",
 		},
-		{
-			accessorKey: "description",
-			header: "Description"
-		}
 	]
 
 	return (
@@ -125,7 +151,7 @@ const ProductTable = () => {
 				<DataTable
 					heading="Products"
 					columns={columns}
-					data={data || []}
+					data={data?.data || []}
 				/>
 			</div>
 

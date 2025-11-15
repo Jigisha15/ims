@@ -1,7 +1,11 @@
-import { ProductInterface } from "@/types/interface"
+import { ProductFetchInterface, ProductInterface } from "@/types/interface"
 import ViewField from "../../common/ViewField"
 
-const ViewProduct = ({ product }: ProductInterface) => {
+interface ViewProductInterface {
+	product: ProductFetchInterface
+}
+
+const ViewProduct = ({ product }: ViewProductInterface) => {
 	const fields = [
 		{ label: "Name", value: product.name },
 		{ label: "Category", value: product.category },
@@ -18,9 +22,14 @@ const ViewProduct = ({ product }: ProductInterface) => {
 
 			{/* 2-column row */}
 			<div className="flex items-center justify-between gap-5">
-				<ViewField label="Name" value={product.name} />
-				<ViewField label="Category" value={product.category} />
+				<div className="w-full">
+					<ViewField label="Name" value={product.name} />
+				</div>
+				<div className="w-full">
+					<ViewField label="Company" value={product.company.name} />
+				</div>
 			</div>
+			<ViewField label="Category" value={product.category.name} />
 
 			{/* Full row */}
 			<ViewField label="Description" value={product.description} />
@@ -30,53 +39,17 @@ const ViewProduct = ({ product }: ProductInterface) => {
 
 			{/* 2-column row */}
 			<div className="flex items-center justify-between gap-5">
-				<ViewField label="Cost Price" value={`₹ ${product.costPrice}`} />
-				<ViewField label="Selling Price" value={`₹ ${product.sellingPrice}`} />
+				<div className="w-full">
+					<ViewField label="Cost Price" value={`₹ ${product.costPrice}`} />
+				</div>
+				<div className="w-full">
+					<ViewField label="Selling Price" value={`₹ ${product.sellingPrice}`} />
+				</div>
 			</div>
 
 			{/* Full rows */}
 			<ViewField label="Stock Quantity" value={product.stockQuantity} />
-			<ViewField label="Company" value={product.companyId} />
-
 		</div>
-		//<div className="space-y-3">
-		//	<div className="flex items-center justify-between gap-5">
-		//		<div className="flex flex-col gap-2 w-full">
-		//			<p className="text-base font-semibold text-gray-600">Name</p>
-		//			<p className="text-base border rounded-md px-3 py-2">{product.name}</p>
-		//		</div>
-		//		<div className="flex flex-col gap-2 w-full">
-		//			<p className="text-base font-semibold text-gray-600">Category</p>
-		//			<p className="text-base border rounded-md px-3 py-2">{product.category}</p>
-		//		</div>
-		//	</div>
-		//	<div className="flex flex-col gap-2">
-		//		<p className="text-base font-semibold text-gray-600">Description</p>
-		//		<p className="text-base border rounded-md px-3 py-2">{product.description}</p>
-		//	</div>
-		//	<div className="flex flex-col gap-2">
-		//		<p className="text-base font-semibold text-gray-600">Model Number</p>
-		//		<p className="text-base border rounded-md px-3 py-2">{product.modelNumber}</p>
-		//	</div>
-		//	<div className="flex items-center justify-between gap-5">
-		//		<div className="flex flex-col gap-2 w-full">
-		//			<p className="text-base font-semibold text-gray-600">Cost Price</p>
-		//			<p className="text-base border rounded-md px-3 py-2">₹ {product.costPrice}</p>
-		//		</div>
-		//		<div className="flex flex-col gap-2 w-full">
-		//			<p className="text-base font-semibold text-gray-600">Selling Price</p>
-		//			<p className="text-base border rounded-md px-3 py-2">₹ {product.sellingPrice}</p>
-		//		</div>
-		//	</div>
-		//	<div className="flex flex-col gap-2">
-		//		<p className="text-base font-semibold text-gray-600">Stock Quantity</p>
-		//		<p className="text-base border rounded-md px-3 py-2">{product.stockQuantity}</p>
-		//	</div>
-		//	<div className="flex flex-col gap-2">
-		//		<p className="text-base font-semibold text-gray-600">Company</p>
-		//		<p className="text-base border rounded-md px-3 py-2">{product.companyId}</p>
-		//	</div>
-		//</div>
 	)
 }
 

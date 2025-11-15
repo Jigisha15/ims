@@ -108,6 +108,16 @@ export class ProductService {
 
   /** UPDATE */
   async update(id: string, dto: UpdateProductDto & { imageUrl?: string }) {
+    const existingProduct = await this.productRepo.findOne({
+      where: { id }
+    })
+    if (!existingProduct) {
+      return {
+        status: 404,
+        message: "Product not found"
+      }
+    }
+
     await this.productRepo.update(id, {
       ...dto,
       updatedAt: new Date(),

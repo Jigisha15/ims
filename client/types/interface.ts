@@ -5,7 +5,7 @@ export interface ProductIntakeInterface {
 	name: string
 	description: string
 	modelNumber: string
-	category: string
+	categoryId: string
 	costPrice: number
 	sellingPrice: number
 	stockQuantity: number
@@ -20,17 +20,18 @@ export interface ProductFetchInterface {
 	name: string
 	description: string
 	modelNumber: string
-	category: string
 	costPrice: number
 	sellingPrice: number
 	stockQuantity: number
 	minimumQuantity: number
 	imageUrl: string
-	companyId: string
 	createdAt: string
 	updatedAt: string
 	createdBy: string
 	updatedBy: string
+	companyId: string
+	company: any
+	category: { id: string, name: string }
 }
 
 export interface ProductCardsInterface {

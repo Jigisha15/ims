@@ -36,7 +36,7 @@ export class ProductController {
     return saved;
   }
 
-  @Get()
+  @Get("get-all")
   findAll() {
     return this.productService.findAll();
   }

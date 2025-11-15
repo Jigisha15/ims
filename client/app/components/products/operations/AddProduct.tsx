@@ -20,7 +20,7 @@ const AddProduct = () => {
 		name: "",
 		description: "",
 		modelNumber: "",
-		category: "",
+		categoryId: "",
 		sellingPrice: 0,
 		stockQuantity: 0,
 		costPrice: 0,
@@ -35,7 +35,7 @@ const AddProduct = () => {
 			name: "",
 			description: "",
 			modelNumber: "",
-			category: "",
+			categoryId: "",
 			sellingPrice: 0,
 			stockQuantity: 0,
 			costPrice: 0,
@@ -60,7 +60,7 @@ const AddProduct = () => {
 			// make the payload first
 			const payload = {
 				...newProduct,
-				category: currentCategory?.id!,
+				categoryId: currentCategory?.id!,
 				createdBy: "d57e0910-4bfc-427c-bc7f-ac324d52315d",
 				companyId: currentCompany?.id!
 			}
