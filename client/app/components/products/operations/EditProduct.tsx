@@ -164,8 +164,6 @@ const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 					value={`${formData.costPrice}`}
 					onChange={handleChange}
 				/>
-				{/*</div>
-				<div className="flex flex-col gap-2">*/}
 				<InputField
 					label="Selling Price"
 					name="sellingPrice"

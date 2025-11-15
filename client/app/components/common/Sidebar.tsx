@@ -11,12 +11,12 @@ export function AppSidebar() {
 
 	const sidebarItems = [
 		{ title: "Home", url: "/", icon: Home },
+		{ title: "Category", url: "/category", icon: TableProperties },
 		{ title: "Products", url: "/products", icon: Package },
-		{ title: "Company", url: "/company", icon: Package },
+		{ title: "Companies", url: "/company", icon: Package },
 		{ title: "Orders", url: "/orders", icon: ListOrdered },
 		{ title: "Purchase Orders", url: "#", icon: PackagePlus },
 		{ title: "Quotations", url: "#", icon: TableProperties },
-		{ title: "Category", url: "/category", icon: TableProperties },
 	];
 
 	return (

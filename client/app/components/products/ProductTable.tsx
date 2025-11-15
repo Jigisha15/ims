@@ -118,18 +118,24 @@ const ProductTable = () => {
 				<div className="">{row.original.category.name}</div>
 			)
 		},
-		//{
-		//	accessorKey: "modelNumber",
-		//	header: "Model Number",
-		//},
-		//{
-		//	accessorKey: "costPrice",
-		//	header: "Cost Price",
-		//},
-		//{
-		//	accessorKey: "sellingPrice",
-		//	header: "Selling Price",
-		//},
+		{
+			accessorKey: "modelNumber",
+			header: "Model Number",
+		},
+		{
+			accessorKey: "costPrice",
+			header: "Cost Price",
+			cell: ({ row }) => (
+				<div className="">₹ {row.original.costPrice}</div>
+			)
+		},
+		{
+			accessorKey: "sellingPrice",
+			header: "Selling Price",
+			cell: ({ row }) => (
+				<div className="">₹ {row.original.sellingPrice}</div>
+			)
+		},
 		{
 			accessorKey: "company",
 			header: "Company",

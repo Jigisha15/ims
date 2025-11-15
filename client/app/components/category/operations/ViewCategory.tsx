@@ -22,11 +22,11 @@ const ViewCategory = ({ category }: CategoryInterface) => {
 			))}
 
 			<div className="flex flex-col gap-2">
-				<label htmlFor="">Products</label>
+				<p className="text-base font-semibold text-gray-600">Products</p>
 				<div className="flex flex-wrap gap-5">
 					{category.products?.length > 0 ? (
 						category.products.map((prod, index) => (
-							<Badge key={index}>{prod.name}</Badge>
+							<Badge key={index} variant="outline" className="px-3 py-1 text-sm font-normal hover:shadow-sm cursor-default">{prod.name}</Badge>
 						))
 					) : (
 						<div className="text-gray-500 text-sm italic">
