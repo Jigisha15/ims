@@ -1,36 +1,34 @@
 "use client"
 
 import { useGetCompanies } from "@/api/company/company-mutation"
-import { useGetCustomers } from "@/api/customer/customer-mutation"
 import { Button } from "@/components/ui/button"
-import { CompanyFetchInterface, CustomerFetchInterface } from "@/types/interface"
-import { Checkbox } from "@radix-ui/react-checkbox"
+import { Checkbox } from "@/components/ui/checkbox"
+import { CompanyFetchInterface, SupplierFetchInterface } from "@/types/interface"
 import { ColumnDef } from "@tanstack/react-table"
 import { Eye, SquarePen, Trash } from "lucide-react"
 import { SetStateAction, useState } from "react"
 import { DataTable } from "../data-table/DataTable"
-import AddCustomer from "./operations/AddCustomer"
-import DeleteCustomer from "./operations/DeleteCustomer"
+import { useGetSuppliers } from "@/api/suppliers/suppliers-mutation"
+import AddSupplier from "./operations/AddSupplier"
+import DeleteSupplier from "./operations/DeleteSupplier"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import EditCustomer from "./operations/EditCustomer"
-import ViewCustomer from "./operations/ViewCustomer"
+import EditSupplier from "./operations/EditSupplier"
+import ViewSupplier from "./operations/ViewSupplier"
 
-
-const CustomerTable = () => {
+const SupplierTable = () => {
 
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
 	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [isEditMode, setIsEditMode] = useState<boolean>(false)
-	const [selectedCustomer, setSelectedCustomer] = useState<CustomerFetchInterface | null>(null)
+	const [selectedSupplier, setSelectedSupplier] = useState<SupplierFetchInterface | null>(null)
 
-	const { data: customerData, isLoading: customerLoading, error: customerError } = useGetCustomers()
+	const { data: supplierData, isLoading: supplierLoading, error: supplierError } = useGetSuppliers()
 	const { data: companyData, isLoading: companyLoading, error: companyError } = useGetCompanies()
 
-	if (customerLoading) return <div>Loading...</div> // TODO: Replace with Skeleton
-	if (customerError) return <div>Something went wrong</div>
+	if (companyLoading) return <div>Loading...</div> // TODO: Replace with Skeleton
+	if (companyError) return <div>Something went wrong</div>
 
-
-	const columns: ColumnDef<CustomerFetchInterface>[] = [
+	const columns: ColumnDef<SupplierFetchInterface>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -76,7 +74,7 @@ const CustomerTable = () => {
 						variant="ghost"
 						className="p-0 hover:bg-inherit w-1"
 						onClick={() => {
-							setSelectedCustomer(row.original);
+							setSelectedSupplier(row.original);
 							setOpenSheet(true);
 							setIsEditMode(true);
 						}}
@@ -89,7 +87,7 @@ const CustomerTable = () => {
 						variant="ghost"
 						className="p-0 hover:bg-inherit w-1"
 						onClick={() => {
-							setSelectedCustomer(row.original);
+							setSelectedSupplier(row.original);
 							setOpenModal(true);
 						}}
 						title="Delete"
@@ -115,25 +113,25 @@ const CustomerTable = () => {
 
 				return <div>{company?.name ?? "Unknown"}</div>;
 			},
-		},
-	];
+		}
+	]
 
 	return (
 		<div className="">
-			<AddCustomer />
+			<AddSupplier />
 
 			<div className="mr-5">
 				<DataTable
-					heading="Customers"
+					heading="Suppliers"
 					columns={columns}
-					data={customerData?.data || []}
+					data={supplierData?.data || []}
 				/>
 			</div>
 
-			<DeleteCustomer
+			<DeleteSupplier
 				openModal={openModal}
 				setOpenModal={setOpenModal}
-				selectedCustomer={selectedCustomer!}
+				selectedSupplier={selectedSupplier!}
 			/>
 
 			<Sheet open={openSheet} onOpenChange={setOpenSheet}>
@@ -143,22 +141,22 @@ const CustomerTable = () => {
 							{isEditMode ? "Edit Customer" : "Customer Details"}
 						</SheetTitle>
 						<SheetDescription className="mt-0 font-semibold">
-							{selectedCustomer
-								? `${selectedCustomer.name}`
-								: "No customer selected"}
+							{selectedSupplier
+								? `${selectedSupplier.name}`
+								: "No supplier selected"}
 						</SheetDescription>
 					</SheetHeader>
 
 					<div className="">
-						{selectedCustomer ? (
+						{selectedSupplier ? (
 							isEditMode ? (
-								<EditCustomer
-									customer={selectedCustomer}
+								<EditSupplier
+									supplier={selectedSupplier}
 									setOpenSheet={setOpenSheet}
 								/>
 							) : (
-								<ViewCustomer
-									customer={selectedCustomer}
+								<ViewSupplier
+									supplier={selectedSupplier}
 								/>
 							)
 						) : (
@@ -171,4 +169,4 @@ const CustomerTable = () => {
 	)
 }
 
-export default CustomerTable
+export default SupplierTable

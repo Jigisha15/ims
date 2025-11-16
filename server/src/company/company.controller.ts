@@ -17,7 +17,7 @@ export class CompanyController {
     return this.companyService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
     return this.companyService.findOne(id);
   }

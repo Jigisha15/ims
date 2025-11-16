@@ -98,12 +98,7 @@ export interface CategoryIntakeInterface {
 
 
 
-
-
-
-
-
-// ======================== CATEGORY ========================
+// ======================== CUSTOMER ========================
 export interface CustomerFetchInterface {
 	id: string
 	name: string
@@ -131,6 +126,29 @@ export interface CustomerIntakeInterface {
 
 
 
+
+
+
+
+// ======================== SUPPLIERS ========================
+export interface SupplierFetchInterface {
+	id: string
+	name: string
+	emailId: string
+	phoneNumber: string
+	role: string
+	createdAt: string
+	updatedAt: string
+	companyId: string
+}
+
+export interface SupplierIntakeInterface {
+	name: string
+	emailId: string
+	phoneNumber: string
+	role: string
+	companyId: string
+}
 
 
 

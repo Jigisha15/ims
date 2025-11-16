@@ -15,18 +15,16 @@ export function AppSidebar() {
 		{ title: "Products", url: "/products", icon: Package },
 		{ title: "Companies", url: "/company", icon: Package },
 		{ title: "Customers", url: "/customers", icon: Users },
+		{ title: "Suppliers", url: "/suppliers", icon: Users },
 		{ title: "Orders", url: "/orders", icon: ListOrdered },
 		{ title: "Purchase Orders", url: "#", icon: PackagePlus },
 		{ title: "Quotations", url: "#", icon: TableProperties },
+		{ title: "Reports", url: "#", icon: TableProperties },
 	];
 
 	return (
 		<Card
-			className={`
-    rounded-none shadow-none border-0 h-screen p-1 relative
-    transition-all duration-300 bg-white flex flex-col
-    ${open ? "w-60" : "w-fit"}
-  `}
+			className={` ounded-none shadow-none border-0 h-screen p-1 relative transition-all duration-300 bg-white flex flex-col ${open ? "w-60" : "w-fit"}`}
 		>
 			{/* Title */}
 			<CardTitle className="text-center border-b py-5">
@@ -48,14 +46,15 @@ export function AppSidebar() {
 			</div>
 
 			{/* Sidebar Items */}
-			<CardContent className="flex flex-col gap-2 mt-5 px-2 overflow-y-auto">
+			<CardContent className="flex flex-col gap-2 mt-0 px-2 overflow-y-auto">
 				{sidebarItems.map((item) => (
 					<Link
 						key={item.title}
 						href={item.url}
-						className="flex items-start justify-start gap-3 border border-white px-4 py-3 rounded-md hover:bg-gray-100"
+						className="flex items-center justify-start gap-3 border border-white px-4 py-2 rounded-md hover:bg-gray-100"
+						title={`${item.title}`}
 					>
-						<item.icon className={`w-6 h-6 text-gray-600 ${open ? "" : "mx-auto"}`} />
+						<item.icon className={`w-5 h-5 text-gray-600 ${open ? "" : "mx-auto"}`} />
 						{open && <span className="text-base">{item.title}</span>}
 					</Link>
 				))}
