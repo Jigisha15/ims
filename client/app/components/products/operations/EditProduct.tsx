@@ -19,7 +19,6 @@ interface EditCompanyInterface {
 
 const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 	const [currentCompany, setCurrentCompany] = useState<CompanyFetchInterface>()
-	const [UpdatedCompany, setUpdatedCompany] = useState<CompanyFetchInterface>()
 	const [currentCategory, setCurrentCategory] = useState<CategoryFetchInterface>()
 
 	const [formData, setFormData] = useState<ProductFetchInterface>({

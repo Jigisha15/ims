@@ -100,6 +100,42 @@ export interface CategoryIntakeInterface {
 
 
 
+
+
+
+// ======================== CATEGORY ========================
+export interface CustomerFetchInterface {
+	id: string
+	name: string
+	emailId: string
+	phoneNumber: string
+	address: string
+	role: string
+	createdBy: string
+	updatedBy: string
+	createdAt: string
+	updatedAt: string
+	companyId: string
+}
+
+export interface CustomerIntakeInterface {
+	name: string
+	emailId: string
+	phoneNumber: string
+	address: string
+	role: string
+	companyId: string
+	createdBy: string
+}
+
+
+
+
+
+
+
+
+
 // ======================== DATA TABLE ========================
 export interface DataTableProps<TData, TValue> {
 	heading: string

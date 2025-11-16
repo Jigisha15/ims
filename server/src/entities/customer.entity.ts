@@ -25,6 +25,12 @@ export class Customer {
 	@Column({ name: "role" })
 	role: string;
 
+	@Column({ name: "created_by" })
+	createdBy: string;
+
+	@Column({ nullable: true, name: "updated_by" })
+	updatedBy: string;
+
 	@CreateDateColumn({ name: 'created_at' })
 	createdAt: Date;
 

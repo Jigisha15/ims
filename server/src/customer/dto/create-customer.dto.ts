@@ -22,6 +22,10 @@ export class CreateCustomerDto {
 	@IsNotEmpty()
 	role: string;
 
+	@IsString()
+	@IsNotEmpty()
+	createdBy: string;
+
 	@IsUUID()
 	@IsNotEmpty()
 	companyId: string;

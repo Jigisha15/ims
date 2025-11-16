@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
-import { ChevronLeft, ChevronRight, Home, ListOrdered, LogOut, Package, PackagePlus, TableProperties } from "lucide-react"
+import { ChevronLeft, ChevronRight, Home, ListOrdered, LogOut, Package, PackagePlus, TableProperties, Users } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -14,6 +14,7 @@ export function AppSidebar() {
 		{ title: "Category", url: "/category", icon: TableProperties },
 		{ title: "Products", url: "/products", icon: Package },
 		{ title: "Companies", url: "/company", icon: Package },
+		{ title: "Customers", url: "/customers", icon: Users },
 		{ title: "Orders", url: "/orders", icon: ListOrdered },
 		{ title: "Purchase Orders", url: "#", icon: PackagePlus },
 		{ title: "Quotations", url: "#", icon: TableProperties },
@@ -22,14 +23,14 @@ export function AppSidebar() {
 	return (
 		<Card
 			className={`
-        rounded-none shadow-none border-0 h-screen p-1 relative
-        transition-all duration-300 bg-white
-        ${open ? "w-60" : "w-fit"}
-      `}
+    rounded-none shadow-none border-0 h-screen p-1 relative
+    transition-all duration-300 bg-white flex flex-col
+    ${open ? "w-60" : "w-fit"}
+  `}
 		>
 			{/* Title */}
 			<CardTitle className="text-center border-b py-5">
-				IMS
+				{open ? "Inventory" : "IMS"}
 			</CardTitle>
 
 			{/* Toggle Button */}
@@ -61,11 +62,11 @@ export function AppSidebar() {
 			</CardContent>
 
 			{/* Footer */}
-			<CardFooter className="border-t">
+			<CardFooter className="border-t mt-auto w-full px-2">
 				{open ? (
 					<Button
 						variant="ghost"
-						className="w-full flex justify-between px-4 py-5"
+						className="text-base w-full flex justify-between px-4 py-6 mb-5 hover:bg-red-100"
 					>
 						Logout <LogOut />
 					</Button>

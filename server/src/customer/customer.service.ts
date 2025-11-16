@@ -49,7 +49,7 @@ export class CustomerService {
   }
 
   async findAll() {
-    const customers = await this.companyRepo.find({
+    const customers = await this.customerRepo.find({
       order: { createdAt: 'DESC' },
     });
 

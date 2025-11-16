@@ -71,6 +71,7 @@ export class OrderService {
   async findAll(companyId?: string) {
     const where = companyId ? { companyId } : {};
     const orders = await this.orderRepo.find({
+      where,
       relations: ['orderItems', 'customer', 'company'],
       order: { createdAt: 'DESC' },
     });
@@ -95,6 +96,13 @@ export class OrderService {
       where: { id },
       relations: ['orderItems', 'customer', 'company'],
     });
+
+    //if (!order) {
+    //  return {
+    //    status: 404,
+    //    message:"Order not found"
+    //  }
+    //}
 
     if (!order) throw new NotFoundException('Order not found');
 
