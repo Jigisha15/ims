@@ -69,7 +69,7 @@ export class CustomerService {
   }
 
   async findOne(id: string) {
-    const customer = await this.companyRepo.findOne({
+    const customer = await this.customerRepo.findOne({
       where: { id },
     });
 
@@ -81,6 +81,22 @@ export class CustomerService {
       status: 200,
       message: 'Customer fetched successfully',
       data: customer,
+    };
+  }
+
+  async findCompanyCustomer(company_id: string) {
+    const customers = await this.customerRepo.find({
+      where: { companyId: company_id },
+    });
+
+    if (customers.length === 0) {
+      throw new NotFoundException('No customers found for this company');
+    }
+
+    return {
+      status: 200,
+      message: 'Customers fetched successfully',
+      data: customers,
     };
   }
 

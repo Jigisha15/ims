@@ -11,6 +11,11 @@ export const getOneCustomer = async (customerId: string) => {
 	return response.data
 }
 
+export const getCompanyCustomer = async (companyId: string) => {
+	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/customer/get-company-customer/${companyId}`)
+	return response.data
+}
+
 export const createCustomer = async (customerData: CustomerIntakeInterface) => {
 	const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/customer/create`, customerData)
 	return response.data

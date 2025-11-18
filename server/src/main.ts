@@ -5,15 +5,23 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [
-      "http://localhost:3001",
-      "https://p8d483jk-3000.inc1.devtunnels.ms",
-      //"*"
-    ],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      callback(null, true);
+    },
+    credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-    credentials: true
-  })
+  });
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT || 3001; // Changed to 3001
+  const host = '0.0.0.0';
+
+  await app.listen(port, host);
+
+  console.log('\n=================================');
+  console.log(`🚀 NestJS Backend is running!`);
+  console.log(`🔗 Local:            http://localhost:${port}`);
+  console.log(`🔗 Network:          http://${host}:${port}`);
+  console.log('=================================\n');
 }
 bootstrap();

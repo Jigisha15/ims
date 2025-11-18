@@ -11,6 +11,11 @@ export const getCategoryWiseProducts = async (category: string) => {
 	return response.data
 }
 
+export const getCompanyWiseProducts = async (companyId: string) => {
+	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/product/company-wise/${companyId}`)
+	return response.data
+}
+
 export const getOneProduct = async (productId: string) => {
 	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/product/${productId}`)
 	return response.data

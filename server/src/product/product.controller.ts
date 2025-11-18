@@ -46,6 +46,11 @@ export class ProductController {
     return this.productService.findCategoryWise(categoryId);
   }
 
+  @Get("company-wise/:companyId")
+  findCompanyWise(@Param("companyId") companyId: string) {
+    return this.productService.findCompanyWise(companyId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addProduct, deleteProduct, getCategoryWiseProducts, getOneProduct, getProducts, updateProduct } from "./products"
-import { ProductIntakeInterface } from "@/types/interface"
+import { addProduct, deleteProduct, getCategoryWiseProducts, getCompanyWiseProducts, getOneProduct, getProducts, updateProduct } from "./products"
+import { ProductFetchInterface, ProductIntakeInterface } from "@/types/interface"
 
 export const useGetProducts = () => {
 	return useQuery({
@@ -13,6 +13,24 @@ export const useGetCategoryProducts = (category: string) => {
 	return useQuery({
 		queryKey: ["category-get-products"],
 		queryFn: () => getCategoryWiseProducts(category)
+	})
+}
+
+export interface ApiResponse<T> {
+	status: number;
+	message: string;
+	data: T;
+}
+
+export const useGetCompanyProducts = (
+	companyId: string,
+	options?: any
+) => {
+	return useQuery<ApiResponse<ProductFetchInterface[]>>({
+		queryKey: ["company-get-products", companyId],
+		queryFn: () => getCompanyWiseProducts(companyId),
+		enabled: !!companyId && options?.enabled !== false,
+		...options
 	})
 }
 

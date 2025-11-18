@@ -1,4 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table"
+import { ORDER_STATUS } from "./enum"
 
 // ======================== PRODUCTS ========================
 export interface ProductIntakeInterface {
@@ -152,6 +153,53 @@ export interface SupplierIntakeInterface {
 
 
 
+
+
+
+// ======================== ORDERS & ORDER ITEMS ========================
+export interface OrderItemsIntakInterface {
+	productId: string
+	quantity: number
+	price: number
+	subtotal: number
+}
+
+export interface OrderItemsFetchInterface {
+	id: string;
+	quantity: number;
+	price: number;
+	subtotal: number;
+	orderId: string;
+	productId: string;
+	//order?: any;    // or OrderFetchInterface if you have it
+	//product?: any;  // or ProductFetchInterface if available
+}
+
+export interface OrderFetchInterface {
+	id: string;
+	orderNo: string;
+	dateOrdered: Date;
+	status: ORDER_STATUS;
+	totalAmount: number;
+	createdAt: Date;
+	updatedAt: Date;
+	companyId: string;
+	customerId: string;
+
+	//// Optional: relations (can be typed more strongly if needed)
+	//company?: any;
+	//customer?: any;
+	//orderItems?: any[];
+	//payments?: any[];
+}
+
+export interface OrderIntakeInterface {
+	companyId: string
+	customerId: string
+	totalAmount: number
+	status: ORDER_STATUS
+	orderItems: OrderItemsIntakInterface[]
+}
 
 
 // ======================== DATA TABLE ========================

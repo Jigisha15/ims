@@ -85,6 +85,20 @@ export class ProductService {
     };
   }
 
+  /** FIND COMPANY-WISE */
+  async findCompanyWise(companyId: string) {
+    const products = await this.productRepo.find({
+      where: { companyId },
+      order: { createdAt: "DESC" },
+    });
+
+    return {
+      status: 200,
+      message: "Products fetched successfully",
+      data: products,
+    };
+  }
+
   /** FIND ONE (formatted) */
   async findOne(id: string) {
     const product = await this.productRepo.findOne({

@@ -27,7 +27,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 			<AppSidebar />
 
 			<main className="flex-1 overflow-y-auto px-5">
-				<Toaster position="top-right" />
+				<Toaster position="top-center" />
 				{children}
 			</main>
 		</div>
