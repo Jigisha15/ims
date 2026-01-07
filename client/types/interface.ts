@@ -1,6 +1,21 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { ORDER_STATUS } from "./enum"
 
+
+// ======================== AUTH ========================
+export interface RegisterInterface {
+	name: string
+	emailId: string
+	phoneNumber: number
+	password: string
+	role: string
+}
+
+export interface LoginInterface {
+	emailId: string
+	password: string
+}
+
 // ======================== PRODUCTS ========================
 export interface ProductIntakeInterface {
 	name: string

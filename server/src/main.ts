@@ -13,7 +13,7 @@ async function bootstrap() {
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
   });
 
-  const port = process.env.PORT || 3001; // Changed to 3001
+  const port = process.env.PORT || 5000; // Changed to 3000
   const host = '0.0.0.0';
 
   await app.listen(port, host);
