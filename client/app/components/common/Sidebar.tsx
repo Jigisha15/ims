@@ -1,16 +1,23 @@
 "use client"
 
+import { logout } from "@/app/store/authSlice"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
 import { ChevronLeft, ChevronRight, Home, ListOrdered, LogOut, Package, PackagePlus, TableProperties, Users } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import toast from "react-hot-toast"
+import { useDispatch } from "react-redux"
 
 export function AppSidebar() {
 	const [open, setOpen] = useState<boolean>(true);
 
+	const router = useRouter()
+	const dispatch = useDispatch()
+
 	const sidebarItems = [
-		{ title: "Home", url: "/", icon: Home },
+		//{ title: "Home", url: "/", icon: Home },
 		{ title: "Category", url: "/category", icon: TableProperties },
 		{ title: "Products", url: "/products", icon: Package },
 		{ title: "Companies", url: "/company", icon: Package },
@@ -22,13 +29,31 @@ export function AppSidebar() {
 		{ title: "Reports", url: "#", icon: TableProperties },
 	];
 
+	const handleLogout = () => {
+		try {
+			const token = localStorage.getItem("token")
+			// remove from the localStorage
+			localStorage.removeItem("token")
+			// remove from the redux
+			dispatch(logout())
+			//toast
+			toast.success("Logged out successfully")
+			// page reload
+			router.push("/auth/register")
+
+		} catch (error: any) {
+			console.error("Error while logging out : ", error)
+			toast.error("Error while logging out")
+		}
+	}
+
 	return (
 		<Card
 			className={` ounded-none shadow-none border-0 h-screen p-1 relative transition-all duration-300 bg-white flex flex-col ${open ? "w-60" : "w-fit"}`}
 		>
 			{/* Title */}
-			<CardTitle className="text-center border-b py-5">
-				{open ? "Inventory" : "IMS"}
+			<CardTitle className="text-center text-wrap border-b py-5 md:px-1">
+				{open ? "Inventory Management System" : "IMS"}
 			</CardTitle>
 
 			{/* Toggle Button */}
@@ -66,6 +91,7 @@ export function AppSidebar() {
 					<Button
 						variant="ghost"
 						className="text-base w-full flex justify-between px-4 py-6 mb-5 hover:bg-red-100"
+						onClick={handleLogout}
 					>
 						Logout <LogOut />
 					</Button>
@@ -73,6 +99,7 @@ export function AppSidebar() {
 					<Button
 						variant="ghost"
 						className="w-full flex justify-center px-4 py-3"
+						onClick={handleLogout}
 					>
 						<LogOut className="w-6 h-6" />
 					</Button>

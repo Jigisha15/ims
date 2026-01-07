@@ -5,12 +5,14 @@ import Footer from "../common/Footer"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { LoginInterface } from "@/types/interface"
 import { useLogin } from "@/api/auth/auth-mutation"
 import toast from "react-hot-toast"
 import InputField from "../common/InputField"
 import { useRouter } from "next/navigation"
+import { loginSuccess } from "@/app/store/authSlice"
+import { useDispatch, useSelector } from "react-redux"
 
 const Login = () => {
 	const [userData, setUserData] = useState<LoginInterface>({
@@ -21,6 +23,8 @@ const Login = () => {
 	const router = useRouter()
 
 	const { mutateAsync: loginMutation, isPending } = useLogin()
+	const dispatch = useDispatch()
+
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setUserData(prev => ({
@@ -29,7 +33,7 @@ const Login = () => {
 		}))
 	}
 
-	const resetForm = async () => {
+	const resetForm = () => {
 		setUserData({
 			emailId: "",
 			password: ""
@@ -38,11 +42,13 @@ const Login = () => {
 
 	const handleLogin = async () => {
 		try {
-			await loginMutation(userData)
+			const response = await loginMutation(userData)
 
-			toast.success(`User logged in successfully!`)
+			dispatch(loginSuccess(response.token));
+			localStorage.setItem("token", response.token)
 
-			router.push("/")
+			toast.success(response.message || "User logged in successfully!")
+			router.push("/category")
 
 			resetForm()
 		} catch (error: any) {
@@ -59,8 +65,6 @@ const Login = () => {
 				</CardHeader>
 				<CardContent>
 					<div className="flex flex-col gap-4">
-						{/*<label htmlFor="">Email Id</label>
-						<Input id="email_id" />*/}
 						<InputField
 							label="Email Id"
 							name="emailId"
@@ -69,8 +73,6 @@ const Login = () => {
 						/>
 					</div>
 					<div className="mb-2">
-						{/*<label htmlFor="">Password</label>
-						<Input id="password" />*/}
 						<InputField
 							label="Password"
 							name="password"
@@ -83,10 +85,14 @@ const Login = () => {
 					</div>
 				</CardContent>
 				<CardFooter className="mx-auto">
-					<CardFooter className="mx-auto">
-						<p className="">Not a user ? <Link href="/auth/register" className="text-blue-600">Register</Link></p>
-					</CardFooter>
+					<p>
+						Not a user?{" "}
+						<Link href="/auth/register" className="text-blue-600">
+							Register
+						</Link>
+					</p>
 				</CardFooter>
+
 			</Card>
 			{/*<Footer />*/}
 		</div >

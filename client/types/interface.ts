@@ -6,7 +6,7 @@ import { ORDER_STATUS } from "./enum"
 export interface RegisterInterface {
 	name: string
 	emailId: string
-	phoneNumber: number
+	phoneNumber: string
 	password: string
 	role: string
 }
