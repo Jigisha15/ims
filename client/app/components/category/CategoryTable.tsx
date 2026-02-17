@@ -3,7 +3,7 @@
 import { useGetCategories } from "@/api/category/category-mutation"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { CategoryFetchInterface } from "@/types/interface"
+import { CategoryFetchInterface, ProductFetchCatInterface, ProductFetchInterface, ProductInterface } from "@/types/interface"
 import { ColumnDef } from "@tanstack/react-table"
 import { Eye, SquarePen, Trash } from "lucide-react"
 import { SetStateAction, useState } from "react"
@@ -94,26 +94,28 @@ const CategoryTable = () => {
 		{
 			accessorKey: "products",
 			header: "Products",
-			cell: ({ row }) => (
-				<div className="">
-					{!row.original.products.length ? (
-						<div className="font-base text-gray-500 italic">No products available for this category</div>
-					) : (
-						<div className="">
-							{row.original.products
-								?.slice(0, 2)
-								.map((prod, index) => (
-									<span key={index}>
-										{prod.name}
-										{index !== 1 && row.original.products.length > 1 ? ", " : ""}
-									</span>
-								))}
-
-							{row.original.products?.length > 2 && " ..."}
-						</div>
-					)}
-				</div>
-			)
+			cell: ({ row }) => {
+				const products = row.original.products ?? [];
+				console.log("Products : ", products)
+				return (
+					<div className="">
+						{products.length < 1 ? (
+							<div className="font-base text-gray-500 italic">No products available for this category</div>
+						) : (
+							<div className="">
+								{products?.slice(0, 2)
+									.map((prod: ProductFetchCatInterface, index: number) => (
+										<span key={index}>
+											{prod.name}
+											{index !== 1 && row.original.products.length > 1 ? ", " : ""}
+										</span>
+									))}
+								{row.original.products?.length > 2 && " ..."}
+							</div>
+						)}
+					</div>
+				)
+			}
 		},
 	]
 

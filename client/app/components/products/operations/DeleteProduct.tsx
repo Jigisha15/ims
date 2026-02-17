@@ -1,14 +1,15 @@
 import { useDeleteProduct } from "@/api/products/products-mutation"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ProductFetchInterface } from "@/types/interface"
+import { ProductFetchInterface, ProductInterface } from "@/types/interface"
 import { Dispatch, SetStateAction } from "react"
 import toast from "react-hot-toast"
 
 interface DeleteProductInterface {
 	openModal: boolean
 	setOpenModal: Dispatch<SetStateAction<boolean>>
-	selectedProduct: ProductFetchInterface
+	//selectedProduct: ProductFetchInterface
+	selectedProduct: ProductInterface
 }
 
 const DeleteProduct = ({ openModal, setOpenModal, selectedProduct }: DeleteProductInterface) => {

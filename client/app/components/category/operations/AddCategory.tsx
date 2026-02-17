@@ -4,12 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { ChangeEvent, useState } from "react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Input } from "@/components/ui/input"
 import { useAddCategory } from "@/api/category/category-mutation"
-import { CategoryIntakeInterface } from "@/types/interface"
 import toast from "react-hot-toast"
 import InputField from "../../common/InputField"
-
 
 const AddCategory = () => {
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
@@ -18,7 +15,10 @@ const AddCategory = () => {
 	const { mutateAsync: addCategoryMutation, isPending } = useAddCategory()
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		({ ...newCategory, [e.target.name]: e.target.value })
+		setNewCategory(prev => ({
+			...prev,
+			[e.target.name]: e.target.value,
+		}))
 	}
 
 	const resetForm = async () => {

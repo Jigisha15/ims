@@ -1,19 +1,25 @@
 import ProductCards from "./ProductCards"
 
-const ProductCardComponent = () => {
+interface ProdCardsInterface {
+	inStock: number
+	lowStock: number
+	outOfStock: number
+}
+
+const ProductCardComponent = ({ inStock, lowStock, outOfStock }: ProdCardsInterface) => {
 	const productCardContent = [
 		{
-			count: 15,
+			count: inStock,
 			title: "Total Products",
 			color: "green"
 		},
 		{
-			count: 15,
+			count: lowStock,
 			title: "Ending Products",
 			color: "orange"
 		},
 		{
-			count: 15,
+			count: outOfStock,
 			title: "End Products",
 			color: "red"
 		}

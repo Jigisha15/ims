@@ -4,14 +4,14 @@ import { CategoryFetchInterface, CategoryIntakeInterface } from "@/types/interfa
 
 export const useGetCategories = () => {
 	return useQuery({
-		queryKey: ["categories-get-all"],
+		queryKey: ["category"],
 		queryFn: getCategories,
 	});
 };
 
 export const useGetOneCategory = (categoryId: string) => {
 	return useQuery({
-		queryKey: ["category-get-one"],
+		queryKey: ["category"],
 		queryFn: () => getOneCategory(categoryId),
 	});
 }
@@ -24,7 +24,7 @@ export const useAddCategory = () => {
 		onSuccess: () => {
 			//refetch company list if available
 			queryClient.invalidateQueries({
-				queryKey: ["categories"]
+				queryKey: ["category"]
 			})
 		},
 		onError: (error) => {
@@ -43,7 +43,7 @@ export const useUpdateCategory = () => {
 		}) => updateCategory(categoryId, updateData),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["category-update"]
+				queryKey: ["category"]
 			})
 		},
 		onError: (error) => {
@@ -59,7 +59,7 @@ export const useDeleteCategory = () => {
 		mutationFn: (categoryId: string) => deleteCategory(categoryId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["category-delete"]
+				queryKey: ["category"]
 			})
 		},
 		onError: (error) => {

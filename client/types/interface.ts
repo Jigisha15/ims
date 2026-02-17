@@ -31,7 +31,7 @@ export interface ProductIntakeInterface {
 	createdBy: string
 }
 
-export interface ProductFetchInterface {
+export interface ProductInterface {
 	id: string
 	name: string
 	description: string
@@ -46,8 +46,35 @@ export interface ProductFetchInterface {
 	createdBy: string
 	updatedBy: string
 	companyId: string
-	company: any
+	company: CompanyPFetchInterface
+	categoryId: string
 	category: { id: string, name: string }
+}
+
+
+export interface ProductFetchCatInterface {
+	id: string
+	name: string
+	description: string
+	modelNumber: string
+	costPrice: number
+	sellingPrice: number
+	stockQuantity: number
+	minimumQuantity: number
+	imageUrl: string
+	createdAt: string
+	updatedAt: string
+	createdBy: string
+	updatedBy: string
+	companyId: string
+	categoryId: string
+}
+
+export interface ProductFetchInterface {
+	products: ProductInterface,
+	inStock: number,
+	lowStock: number,
+	outOfStock: number
 }
 
 export interface ProductCardsInterface {
@@ -56,13 +83,14 @@ export interface ProductCardsInterface {
 	color: string
 }
 
-export interface ProductInterface {
-	product: ProductIntakeInterface
-	//company: any
-}
+//export interface ProductInterface {
+//	product: ProductIntakeInterface
+//	//company: any
+//}
 
 export interface EditProductInterface {
-	product: ProductFetchInterface
+	product: ProductInterface
+	//product: ProductFetchInterface
 	productId: string
 }
 
@@ -78,6 +106,18 @@ export interface CompanyFetchInterface {
 	phoneNumber: string
 	address: string
 	gstin: string
+	createdBy: string
+}
+
+export interface CompanyPFetchInterface {
+	id: string
+	name: string
+	emailId: string
+	phoneNumber: string
+	address: string
+	gstin: string
+	createdAt: string
+	updatedBy: string
 	createdBy: string
 }
 
@@ -102,7 +142,7 @@ export interface CompanyInterface {
 export interface CategoryFetchInterface {
 	id: string
 	name: string
-	products: ProductFetchInterface[]
+	products: ProductFetchCatInterface[]
 }
 
 export interface CategoryIntakeInterface {

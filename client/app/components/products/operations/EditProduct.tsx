@@ -3,7 +3,7 @@
 import { useUpdateProduct } from "@/api/products/products-mutation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CategoryFetchInterface, CompanyFetchInterface, EditProductInterface, ProductFetchInterface, ProductInterface } from "@/types/interface"
+import { CategoryFetchInterface, CompanyFetchInterface, ProductInterface } from "@/types/interface"
 import { ChangeEvent, useState } from "react"
 import toast from "react-hot-toast"
 import InputField from "../../common/InputField"
@@ -13,7 +13,7 @@ import { useGetCompanies } from "@/api/company/company-mutation"
 import { useGetCategories } from "@/api/category/category-mutation"
 
 interface EditCompanyInterface {
-	product: ProductFetchInterface
+	product: ProductInterface
 	setOpenSheet: (vl: boolean) => void
 }
 
@@ -21,7 +21,7 @@ const EditProduct = ({ product, setOpenSheet }: EditCompanyInterface) => {
 	const [currentCompany, setCurrentCompany] = useState<CompanyFetchInterface>()
 	const [currentCategory, setCurrentCategory] = useState<CategoryFetchInterface>()
 
-	const [formData, setFormData] = useState<ProductFetchInterface>({
+	const [formData, setFormData] = useState<ProductInterface>({
 		id: product.id,
 		name: product.name,
 		description: product.description,

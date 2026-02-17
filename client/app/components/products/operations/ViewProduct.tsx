@@ -2,7 +2,8 @@ import { ProductFetchInterface, ProductInterface } from "@/types/interface"
 import ViewField from "../../common/ViewField"
 
 interface ViewProductInterface {
-	product: ProductFetchInterface
+	//product: ProductFetchInterface
+	product: ProductInterface
 }
 
 const ViewProduct = ({ product }: ViewProductInterface) => {

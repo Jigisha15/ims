@@ -1,6 +1,6 @@
 "use client"
 
-import { ProductFetchInterface, ProductIntakeInterface } from "@/types/interface"
+import { ProductFetchInterface, ProductIntakeInterface, ProductInterface } from "@/types/interface"
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "../data-table/DataTable"
 import { dummyProductData } from "@/types/dummyfile"
@@ -16,19 +16,18 @@ import { useGetProducts } from "@/api/products/products-mutation"
 import DeleteProduct from "./operations/DeleteProduct"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-const ProductTable = () => {
+interface ProductTableProps {
+	data: ProductInterface[];
+}
 
+const ProductTable = ({ data }: ProductTableProps) => {
 	const [openSheet, setOpenSheet] = useState<boolean>(false)
 	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [isEditMode, setIsEditMode] = useState<boolean>(false)
-	const [selectedProduct, setSelectedProduct] = useState<ProductFetchInterface | null>(null)
+	const [selectedProduct, setSelectedProduct] = useState<ProductInterface | null>(null)
+	//const [selectedProduct, setSelectedProduct] = useState<ProductFetchInterface | null>(null)
 
-	const { data, isLoading, error } = useGetProducts()
-
-	if (isLoading) return <div>Loading...</div> // TODO: Replace with Skeleton
-	if (error) return <div>Something went wrong</div>
-
-	const columns: ColumnDef<ProductFetchInterface>[] = [
+	const columns: ColumnDef<ProductInterface>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -62,6 +61,7 @@ const ProductTable = () => {
 						variant="ghost"
 						className="p-0 m-0 hover:bg-inherit w-1"
 						onClick={() => {
+							setSelectedProduct(row.original)
 							setIsEditMode(false)
 							setOpenSheet(true)
 						}}
@@ -157,7 +157,7 @@ const ProductTable = () => {
 				<DataTable
 					heading="Products"
 					columns={columns}
-					data={data?.data || []}
+					data={data}
 				/>
 			</div>
 

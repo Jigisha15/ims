@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from 'src/entities/product.entity';
-import { Repository } from 'typeorm';
+import { Between, Equal, MoreThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Company } from 'src/entities/company.entity';
@@ -59,15 +59,38 @@ export class ProductService {
 
   /** FIND ALL */
   async findAll() {
-    const products = await this.productRepo.find({
-      relations: ["company", "category"],
-      order: { createdAt: 'DESC' },
-    });
+    // put this in promise.all
+    const [products, inStock, lowStock, outOfStock] = await Promise.all([
+      this.productRepo.find({
+        relations: ["company", "category"],
+        order: { createdAt: 'DESC' },
+      }),
+      this.productRepo.count({
+        where: {
+          stockQuantity: MoreThan(5),
+        }
+      }),
+      this.productRepo.count({
+        where: {
+          stockQuantity: Between(1, 5)
+        }
+      }),
+      this.productRepo.count({
+        where: {
+          stockQuantity: Equal(0)
+        }
+      })
+    ])
 
     return {
       status: 200,
       message: "Products fetched successfully",
-      data: products,
+      data: {
+        products,
+        inStock,
+        lowStock,
+        outOfStock
+      },
     };
   }
 
@@ -157,5 +180,41 @@ export class ProductService {
       status: 200,
       message: "Product deleted successfully",
     };
+  }
+
+  /** COUNT */
+  async productCount() {
+    try {
+      const [inStock, lowStock, outOfStock] = await Promise.all([
+        this.productRepo.count({
+          where: {
+            stockQuantity: MoreThan(5),
+          }
+        }),
+        this.productRepo.count({
+          where: {
+            stockQuantity: Between(1, 5)
+          }
+        }),
+        this.productRepo.count({
+          where: {
+            stockQuantity: Equal(0)
+          }
+        })
+      ])
+
+      return {
+        success: true,
+        message: "Data fetched successfully",
+        data: {
+          inStock,
+          lowStock,
+          outOfStock
+        }
+      }
+
+    } catch (error: any) {
+      throw Error("Error while fetching data : ", error)
+    }
   }
 }
