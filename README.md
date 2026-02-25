@@ -1,10 +1,12 @@
 Making an Inventory Management System targeting small businesses.
 It helps manage businesses manage their stock, provides informative dashboard.
 Each page gives an overview of the content within it (cards on the top of each page).
+
 The Client (frontend) is made using :-
   1. Nextjs (framework) 
   2. Shadcn (ui)
   3. Tanstack (hit apis, have cleaner files)
+     
 The Server (backend) is made using :-
   1. Nestjs (framework)
   2. Prisma (orm)
